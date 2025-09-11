@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:text="Login"
             android:textSize="24sp"
-            android:textColor="@color/blue"
+            android:textColor="@color/grey"
             android:gravity="center"
             android:clickable="true"
             android:paddingBottom="8dp"
@@ -38,14 +38,12 @@
             android:layout_weight="1"
             android:text="Sign Up"
             android:textSize="24sp"
-            android:textColor="@color/grey"
+            android:textColor="@color/blue"
             android:gravity="center"
             android:clickable="true"
             android:paddingBottom="8dp"
             android:fontFamily="@font/alata"/>
     </LinearLayout>
-
-    <!-- Underline indicator -->
 
     <!-- Input fields container -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,31 +54,53 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="50dp"
+        app:layout_constraintTop_toBottomOf="@id/toggleLayout"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleLayout">
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Full Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:background="@drawable/rounded_bg"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/alata"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password -->
@@ -90,79 +110,90 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded_bg"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailLayout">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/alata"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="10dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Forgot password -->
-        <TextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
+        <!-- Confirm Password -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPasswordLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/alata"
-            android:text="Forgot Password?"
-            android:textColor="@color/blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_bg"
+            app:layout_constraintTop_toBottomOf="@id/passwordLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Continue button -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Register button -->
         <Button
-            android:id="@+id/btnContinue"
+            android:id="@+id/btnRegister"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/blue_bg_color"
             android:fontFamily="@font/alata"
-            android:text="Continue"
+            android:text="Register"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- Social login -->
+        <!-- OR -->
         <TextView
             android:id="@+id/tvOr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/alata"
             android:gravity="center"
             android:text="----- OR -----"
             android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/alata"
+            app:layout_constraintTop_toBottomOf="@id/btnRegister"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnContinue" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!-- Social login -->
         <LinearLayout
             android:id="@+id/socialLoginLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/tvOr"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvOr">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <Button
                 android:id="@+id/btnApple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/blank_bg"
-                android:fontFamily="@font/alata"
-                android:text="Login with Apple"
-                android:textColor="@color/black" />
+                android:text="Register with Apple"
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
 
             <Button
                 android:id="@+id/btnGoogle"
@@ -170,22 +201,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/blank_bg"
-                android:fontFamily="@font/alata"
-                android:text="Login with Google"
-                android:textColor="@color/black" />
+                android:text="Register with Google"
+                android:textColor="@color/black"
+                android:fontFamily="@font/alata"/>
         </LinearLayout>
 
-        <!-- Sign up hint -->
+        <!-- Login hint -->
         <TextView
-            android:id="@+id/tvSignUpHint"
+            android:id="@+id/tvLoginHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/alata"
-            android:text="Don't have an account?"
+            android:text="Already have an account?"
             android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/alata"
+            app:layout_constraintTop_toBottomOf="@id/socialLoginLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/socialLoginLayout" />
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

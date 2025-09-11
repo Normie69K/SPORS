@@ -50,7 +50,7 @@ class Splash_Screen : AppCompatActivity() {
         //Delay 5 sec -> then go to the main_activity
         lifecycleScope.launch {
             delay(3000)
-            startActivity(Intent(this@Splash_Screen,LoginActivity::class.java))
+            startActivity(Intent(this@Splash_Screen, GetStartedActivity::class.java))
             finish() //destroy this activity
         }
 

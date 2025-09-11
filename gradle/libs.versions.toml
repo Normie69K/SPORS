@@ -1,7 +1,10 @@
 [versions]
-agp = "8.10.1"
+agp = "8.13.0"
 appcompatVersion = "1.6.1"
 coreKtxVersion = "1.10.1"
+curvedbottomnavigation = "0.1.3"
+curvedbottomnavigationVersion = "0.6.5"
+fragmentKtx = "1.8.9"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -23,6 +26,9 @@ lifecycleViewmodelKtx = "2.9.3"
 androidx-appcompat-v161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v1101 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+curvedbottomnavigation = { module = "com.github.qamarelsafadi:CurvedBottomNavigation", version.ref = "curvedbottomnavigation" }
+curvedbottomnavigation-v065 = { module = "com.github.qamarelsafadi:CurvedBottomNavigation", version.ref = "curvedbottomnavigationVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

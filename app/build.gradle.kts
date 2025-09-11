@@ -56,5 +56,5 @@ dependencies {
     implementation(libs.play.services.maps.v1820)
     implementation(libs.androidx.core.ktx.v1101)
     implementation(libs.androidx.appcompat.v161)
-
+    implementation(libs.androidx.fragment.ktx)
 }

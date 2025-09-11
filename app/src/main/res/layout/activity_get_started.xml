@@ -86,20 +86,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:background="@drawable/blue_bg_color"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-                <TextView
+<!--                <TextView-->
+<!--                    android:id="@+id/textView7"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:clickable="true"-->
+<!--                    android:focusable="true"-->
+<!--                    android:fontFamily="@font/alata"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="Get Started"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="20sp" />-->
+
+
+                <Button
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/blue_bg_color"
                     android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/alata"
                     android:gravity="center"
-                    android:text="Get Started"
+                    android:text="Sign Up"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:gravity="center"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/alata"
+                    android:text="Register" />
             </LinearLayout>
 
         </LinearLayout>
