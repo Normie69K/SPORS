@@ -13,7 +13,6 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -53,8 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.material.v1130)
-    implementation(libs.play.services.maps.v1820)
     implementation(libs.androidx.core.ktx.v1101)
     implementation(libs.androidx.appcompat.v161)
     implementation(libs.androidx.fragment.ktx)
+    implementation("com.github.ibrahimsn98:SmoothBottomBar:1.7.9")
 }

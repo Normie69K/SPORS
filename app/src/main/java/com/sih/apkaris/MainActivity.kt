@@ -1,39 +1,37 @@
 package com.sih.apkaris
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import com.sih.apkaris.fragements.LoginFragment
-import com.sih.apkaris.fragements.RegisterFragment
+import com.sih.apkaris.fragements.*
+import me.ibrahimsn.lib.SmoothBottomBar
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var bottomBar: SmoothBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val showFragment = intent.getStringExtra("showFragment")
-        if (showFragment == "register") showRegisterFragment()
-        else showLoginFragment()
+        bottomBar = findViewById(R.id.bottomBar)
 
         val sharedPref = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
         val loggedInEmail = sharedPref.getString("loggedInEmail", null)
 
-        // If a user is already logged in, go directly to HomeActivity
         if (loggedInEmail != null) {
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+            // User already logged in → show Home and bottom bar
+            showHomeFragment()
+            showBottomBar()
         } else {
-            // Show login fragment if no user logged in
+            // Not logged in → show login/register without bottom bar
             if (savedInstanceState == null) {
-                supportFragmentManager.commit {
-                    replace(R.id.fragmentContainer, LoginFragment())
-                }
+                showLoginFragment()
             }
 
-            // Prepopulate some temporary logins if not done before
+            // Prepopulate test accounts
             if (!sharedPref.contains("test1_email")) {
                 sharedPref.edit().apply {
                     putString("test1_email", "test1@gmail.com")
@@ -42,6 +40,15 @@ class MainActivity : AppCompatActivity() {
                     putString("test2_password", "password2")
                     apply()
                 }
+            }
+        }
+
+        // Handle bottom bar selections
+        bottomBar.onItemSelected = { pos ->
+            when (pos) {
+                0 -> showProfileFragment()
+                1 -> showHomeFragment()
+                2 -> showBleFragment()
             }
         }
     }
@@ -58,12 +65,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun showHomeFragment() {
+        supportFragmentManager.commit {
+            replace(R.id.fragmentContainer, HomeFragment())
+        }
+    }
+
+    fun showProfileFragment() {
+        supportFragmentManager.commit {
+            replace(R.id.fragmentContainer, ProfileFragment())
+        }
+    }
+
+    fun showBleFragment() {
+        supportFragmentManager.commit {
+            replace(R.id.fragmentContainer, BLEFragment())
+        }
+    }
+
     fun goToHome(email: String) {
-        // Store logged in user
+        // Save login info
         val sharedPref = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
         sharedPref.edit().putString("loggedInEmail", email).apply()
 
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
+        showHomeFragment()
+        showBottomBar()
+    }
+
+    private fun showBottomBar() {
+        bottomBar.visibility = View.VISIBLE
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SmoothBottomBarStyle">
+        <item name="backgroundColor">@color/sb_background</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="indicatorColor">@color/sb_accent</item>
+        <item name="indicatorRadius">32dp</item>
+
+        <item name="iconSize">30dp</item>
+        <item name="iconTint">@color/sb_icon_inactive</item>
+        <item name="iconTintActive">@color/sb_accent</item>
+
+        <item name="textColor">@color/sb_text</item>
+        <item name="textSize">14sp</item>
+        <item name="itemFontFamily">@font/poppins_medium</item>
+
+        <item name="itemPadding">16dp</item>
+        <item name="sideMargins">20dp</item>
+
+        <item name="duration">400</item>
+    </style>
+
+
+</resources>

@@ -7,8 +7,15 @@
     <color name="blue">#33A1E0</color>
     <color name="dark_blue">#34699A</color>
     <color name="grey">#A29E9E</color>
+    <color name="grey_500">#CCBEBE</color>
 
     <color name="colorPrimaryDark">#9E0101</color>
+
+    <color name="sb_background">#FFFFFF</color>         <!-- white background -->
+    <color name="sb_accent">#33A1E0</color>           <!-- bright blue accent -->
+    <color name="sb_icon_inactive">#9E9E9E</color>    <!-- gray for inactive icons -->
+    <color name="sb_text">#212121</color>             <!-- dark gray for text -->
+
 
 
 </resources>
