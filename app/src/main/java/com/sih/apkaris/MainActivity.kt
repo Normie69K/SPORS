@@ -6,7 +6,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.sih.apkaris.fragements.*
+import com.sih.apkaris.fragments.BLEFragment
 import me.ibrahimsn.lib.SmoothBottomBar
+import androidx.core.content.edit
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             // User already logged in → show Home and bottom bar
             showHomeFragment()
             showBottomBar()
+            bottomBar.itemActiveIndex = 1
         } else {
             // Not logged in → show login/register without bottom bar
             if (savedInstanceState == null) {
@@ -32,12 +35,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             // Prepopulate test accounts
-            if (!sharedPref.contains("test1_email")) {
+            if (!sharedPref.contains("test1@gmail.com_password")) {
                 sharedPref.edit().apply {
-                    putString("test1_email", "test1@gmail.com")
-                    putString("test1_password", "password1")
-                    putString("test2_email", "test2@gmail.com")
-                    putString("test2_password", "password2")
+                    putString("test1@gmail.com_password", "password1")
+                    putString("test2@gmail.com_password", "password2")
+                    putString("karansingh73457@gmail.com_password", "Karanhere")
                     apply()
                 }
             }
@@ -51,6 +53,8 @@ class MainActivity : AppCompatActivity() {
                 2 -> showBleFragment()
             }
         }
+
+
     }
 
     fun showLoginFragment() {
@@ -86,11 +90,13 @@ class MainActivity : AppCompatActivity() {
     fun goToHome(email: String) {
         // Save login info
         val sharedPref = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-        sharedPref.edit().putString("loggedInEmail", email).apply()
+        sharedPref.edit { putString("loggedInEmail", email) }
 
         showHomeFragment()
         showBottomBar()
+        bottomBar.itemActiveIndex = 1 // highlight Home tab
     }
+
 
     private fun showBottomBar() {
         bottomBar.visibility = View.VISIBLE

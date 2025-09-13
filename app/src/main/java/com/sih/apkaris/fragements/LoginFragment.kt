@@ -47,14 +47,16 @@ class LoginFragment : Fragment() {
                 return@setOnClickListener
             }
 
+
             val sharedPref = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-            sharedPref.edit().apply(){
-                putString("test1@gmail","password1")
-                putString("test2@gmail.com_password","password2")
-                putString("admin@gmail.com","admin")
-                putString("karansingh73457@gmail.com","Karanhere")
+            sharedPref.edit().apply {
+                putString("test1@gmail.com_password", "password1")
+                putString("test2@gmail.com_password", "password2")
+                putString("admin@gmail.com_password", "admin")
+                putString("karansingh73457@gmail.com_password", "Karanhere")
                 apply()
             }
+
             val storedPassword = sharedPref.getString("${email}_password", null)
             if (storedPassword != null && storedPassword == password) {
                 (activity as MainActivity).goToHome(email)
