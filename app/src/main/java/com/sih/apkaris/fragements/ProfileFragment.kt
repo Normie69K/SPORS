@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.BatteryManager
 import android.os.Build
@@ -13,14 +14,11 @@ import android.os.Environment
 import android.os.StatFs
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -31,6 +29,7 @@ import com.sih.apkaris.R
 
 class ProfileFragment : Fragment() {
 
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var tvUserName: TextView
     private lateinit var tvUserEmail: TextView
     private lateinit var tvDeviceModel: TextView
@@ -41,19 +40,23 @@ class ProfileFragment : Fragment() {
     private lateinit var tvSimOperator: TextView
     private lateinit var tvBatteryLevel: TextView
     private lateinit var tvStorageInfo: TextView
+    private lateinit var deviceIdText: TextView
     private lateinit var btnLogout: Button
     private lateinit var ivEditName: ImageView
+    private lateinit var ivEditDevice: ImageView
 
-    private val REQUESTPHONESTATE = 1001
+    private val REQUEST_PHONE_STATE = 1001
+    private var currentDeviceId: String = "Unknown"
 
     @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE")
-    @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        sharedPref = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+
+        // UI references
         tvUserName = view.findViewById(R.id.tvUserName)
         tvUserEmail = view.findViewById(R.id.tvUserEmail)
         tvDeviceModel = view.findViewById(R.id.tvDeviceModel)
@@ -66,30 +69,38 @@ class ProfileFragment : Fragment() {
         tvStorageInfo = view.findViewById(R.id.tvStorageInfo)
         btnLogout = view.findViewById(R.id.btnLogout)
         ivEditName = view.findViewById(R.id.ivEditName)
+        ivEditDevice = view.findViewById(R.id.EdtDevice)
+        deviceIdText = view.findViewById(R.id.deviceId)
 
-        val sharedPref = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-        val email = sharedPref.getString("loggedInEmail", "Unknown")
-        val username = sharedPref.getString("username", email?.substringBefore("@") ?: "Unknown")
+        // Load stored values
+        val email = sharedPref.getString("loggedInEmail", "user@email.com")
+        val username = sharedPref.getString("username", email?.substringBefore("@") ?: "Unknown User")
+        val storedDeviceId = sharedPref.getString("deviceId", "Device-01")
 
         tvUserName.text = username
         tvUserEmail.text = email
+        tvUserPhone.text = sharedPref.getString("phone", "+91 XXXXXXX")
+        deviceIdText.text = storedDeviceId
+        currentDeviceId = storedDeviceId ?: username ?: "Unknown"
 
         // Edit username
         ivEditName.setOnClickListener {
-            val editText = EditText(requireContext())
-            editText.setText(tvUserName.text)
-            AlertDialog.Builder(requireContext())
-                .setTitle("Edit Username")
-                .setView(editText)
-                .setPositiveButton("Save") { _: DialogInterface, _: Int ->
-                    val newName = editText.text.toString().trim()
-                    if (newName.isNotEmpty()) {
-                        tvUserName.text = newName
-                        sharedPref.edit { putString("username", newName) }
-                    }
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
+            showEditDialog("Edit Username", tvUserName.text.toString()) { newName ->
+                tvUserName.text = newName
+                sharedPref.edit { putString("username", newName) }
+                currentDeviceId = newName
+                propagateDeviceIdChange(newName)
+            }
+        }
+
+        // Edit Device ID
+        ivEditDevice.setOnClickListener {
+            showEditDialog("Edit Device ID", deviceIdText.text.toString()) { newId ->
+                deviceIdText.text = newId
+                sharedPref.edit().putString("deviceId", newId).apply()
+                currentDeviceId = newId
+                propagateDeviceIdChange(newId)
+            }
         }
 
         // Device info
@@ -108,7 +119,7 @@ class ProfileFragment : Fragment() {
         val totalGB = stat.totalBytes / (1024.0 * 1024.0 * 1024.0)
         tvStorageInfo.text = String.format("Storage: %.1f GB free / %.1f GB", freeGB, totalGB)
 
-        // Phone info (requires permission)
+        // Phone info
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.READ_PHONE_STATE
@@ -122,12 +133,13 @@ class ProfileFragment : Fragment() {
                     Manifest.permission.READ_PHONE_NUMBERS,
                     Manifest.permission.READ_SMS
                 ),
-                REQUESTPHONESTATE
+                REQUEST_PHONE_STATE
             )
         }
 
+        // Logout
         btnLogout.setOnClickListener {
-            sharedPref.edit { remove("loggedInEmail") }
+            sharedPref.edit().clear().apply()
             val intent = Intent(requireContext(), GetStartedActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -136,23 +148,48 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
+        val input = EditText(requireContext()).apply {
+            setText(currentValue)
+            inputType = InputType.TYPE_CLASS_TEXT
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setView(input)
+            .setPositiveButton("Save") { _, _ ->
+                val newVal = input.text.toString().trim()
+                if (newVal.isNotEmpty()) {
+                    onSave(newVal)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun propagateDeviceIdChange(newId: String) {
+        val bleFragment = parentFragmentManager.findFragmentByTag("BLEFragment") as? BLEFragment
+        bleFragment?.updateDeviceId(newId)
+    }
+
     @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE")
-    @SuppressLint("HardwareIds", "SetTextI18n")
+    @SuppressLint("HardwareIds")
     private fun showPhoneInfo() {
         val tm = requireContext().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
-        // IMEI or Android ID fallback
-        val deviceId = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            tm.deviceId ?: "N/A"
-        } else {
-            Settings.Secure.getString(
-                requireContext().contentResolver,
-                Settings.Secure.ANDROID_ID
-            )
+        val deviceId = try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                tm.deviceId ?: "N/A"
+            } else {
+                Settings.Secure.getString(
+                    requireContext().contentResolver,
+                    Settings.Secure.ANDROID_ID
+                )
+            }
+        } catch (e: Exception) {
+            "N/A"
         }
         tvIMEI.text = "Device ID: $deviceId"
 
-        // Phone number
         val phone = try {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -176,7 +213,6 @@ class ProfileFragment : Fragment() {
         }
         tvUserPhone.text = "Phone: $phone"
 
-        // SIM operator
         val operator = try {
             tm.simOperatorName ?: "Not Available"
         } catch (e: Exception) {
@@ -185,27 +221,22 @@ class ProfileFragment : Fragment() {
         tvSimOperator.text = "SIM Operator: $operator"
     }
 
-    @Deprecated("Deprecated in Java")
-    @SuppressLint("SetTextI18n")
-    @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE")
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUESTPHONESTATE) {
+        if (requestCode == REQUEST_PHONE_STATE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 showPhoneInfo()
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Cannot access IMEI/Phone info: Permission Denied",
-                    Toast.LENGTH_LONG
-                ).show()
                 tvIMEI.text = "Device ID: Permission Denied"
                 tvUserPhone.text = "Phone: Permission Denied"
                 tvSimOperator.text = "SIM Operator: Permission Denied"
+                Toast.makeText(
+                    requireContext(),
+                    "Cannot access phone info: Permission Denied",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

@@ -36,7 +36,7 @@
                     android:src="@mipmap/app_icon"
                     android:contentDescription="Profile Icon"
                     android:layout_marginBottom="12dp"
-                    android:padding="6dp"/>
+                    android:padding="6dp" />
 
                 <!-- Editable Username Row -->
                 <LinearLayout
@@ -90,7 +90,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
         <!-- Device Info Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -115,6 +114,33 @@
                     android:textColor="#212121"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <!-- Editable Device ID Row -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/deviceId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata"
+                        android:text="Device-01"
+                        android:textColor="#444"
+                        android:textSize="15sp"
+                        android:layout_marginEnd="8dp" />
+
+                    <ImageView
+                        android:id="@+id/EdtDevice"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="Edit Device ID"
+                        app:tint="#2196F3" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvDeviceModel"
@@ -162,15 +188,6 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/tvSimNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="SIM Number: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
                     android:id="@+id/tvBatteryLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -187,9 +204,9 @@
                     android:text="Storage: "
                     android:textColor="#444"
                     android:textSize="15sp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
 
         <!-- Logout Button -->
         <Button
@@ -205,5 +222,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
+
     </LinearLayout>
 </ScrollView>

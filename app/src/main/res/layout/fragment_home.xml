@@ -1,168 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/homeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:fillViewport="true">
 
-    <!-- Profile Header -->
-    <LinearLayout
-        android:id="@+id/profileHeader"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:background="@color/white"
-        android:elevation="4dp">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/profile"
-            android:contentDescription="avatar"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center_vertical" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="12dp"
-            android:layout_gravity="center_vertical">
-
-            <TextView
-                android:fontFamily="@font/alata"
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User Name"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:fontFamily="@font/alata"
-                android:id="@+id/tvUserStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Active Now"
-                android:textSize="12sp"
-                android:textColor="@android:color/holo_green_dark" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Map -->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_below="@id/profileHeader"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_marginTop="8dp" />
-
-    <!-- Login History card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardLoginHistory"
-        android:layout_below="@id/mapFragment"
+    <RelativeLayout
+        android:id="@+id/homeRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="10dp">
+        android:padding="8dp">
 
+        <!-- Profile Header -->
         <LinearLayout
+            android:id="@+id/profileHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_height="75dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@color/white"
+            android:elevation="4dp">
 
-            <TextView
-                android:fontFamily="@font/alata"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Previous Logins"
-                android:textStyle="bold"
-                android:textSize="15sp" />
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/profile"
+                android:contentDescription="avatar"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_vertical" />
 
             <LinearLayout
-                android:id="@+id/layoutLoginHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:fontFamily="@font/alata"
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:fontFamily="@font/alata"
+                    android:id="@+id/tvUserStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active Now"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/holo_green_dark" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Map -->
+        <fragment
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_below="@id/profileHeader"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Login History card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardLoginHistory"
+            android:layout_below="@id/mapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="6dp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                android:padding="12dp">
 
-    <!-- Report / Track card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardReport"
-        android:layout_below="@id/cardLoginHistory"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="10dp">
+                <TextView
+                    android:fontFamily="@font/alata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Previous Logins"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
 
-        <LinearLayout
+                <LinearLayout
+                    android:id="@+id/layoutLoginHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="6dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Report / Track card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardReport"
+            android:layout_below="@id/cardLoginHistory"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="10dp">
 
-            <TextView
-                android:fontFamily="@font/alata"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Device Actions"
-                android:textStyle="bold"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/btnReportLost"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:fontFamily="@font/alata"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:background="@drawable/blue_bg_color"
-                android:text="Report Lost / Forgotten"
-                android:layout_marginTop="8dp" />
+                android:orientation="vertical"
+                android:padding="12dp">
 
-            <Button
-                android:id="@+id/btnTrackDevice"
-                android:textColor="@color/white"
-                android:fontFamily="@font/alata"
-                android:layout_width="match_parent"
-                android:background="@drawable/blue_bg_color"
-                android:layout_height="wrap_content"
-                android:text="Track Device"
-                android:layout_marginTop="8dp" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:fontFamily="@font/alata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Device Actions"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
 
-    <!-- simple tip -->
-    <TextView
-        android:fontFamily="@font/alata"
-        android:id="@+id/tvSecurityTip"
-        android:layout_below="@id/cardReport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:background="#FFF3CD"
-        android:text="Tip: Keep location and Bluetooth permissions enabled for real-time tracking."
-        android:textSize="13sp" />
+                <Button
+                    android:id="@+id/btnReportLost"
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/alata"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:background="@drawable/blue_bg_color"
+                    android:text="Report Lost / Forgotten"
+                    android:layout_marginTop="8dp" />
 
-    <!-- Floating refresh -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_popup_sync"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp" />
-</RelativeLayout>
+                <Button
+                    android:id="@+id/btnTrackDevice"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/alata"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/blue_bg_color"
+                    android:layout_height="wrap_content"
+                    android:text="Track Device"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- simple tip -->
+        <TextView
+            android:id="@+id/tvSecurityTip"
+            android:layout_below="@id/cardReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:background="#FFF3CD"
+            android:text="Tip: Keep location and Bluetooth permissions enabled for real-time tracking."
+            android:textSize="13sp" />
+
+        <!-- Floating refresh -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_popup_sync"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="16dp" />
+    </RelativeLayout>
+</ScrollView>
