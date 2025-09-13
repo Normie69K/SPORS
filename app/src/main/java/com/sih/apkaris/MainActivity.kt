@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.sih.apkaris.fragements.*
-import com.sih.apkaris.fragments.BLEFragment
 import me.ibrahimsn.lib.SmoothBottomBar
 import androidx.core.content.edit
 

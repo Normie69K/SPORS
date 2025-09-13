@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ble_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:background="@android:color/white">
 
-    <!-- Bluetooth Icon -->
+    <!-- Top: Bluetooth toggle -->
     <ImageView
         android:id="@+id/ivBluetoothToggle"
         android:layout_width="120dp"
@@ -16,9 +18,8 @@
         android:contentDescription="Bluetooth Toggle"
         android:padding="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:tint="@android:color/darker_gray" />
+        app:tint="@color/grey" />
 
-    <!-- Status Text -->
     <TextView
         android:id="@+id/tvBleStatus"
         android:layout_width="wrap_content"
@@ -26,6 +27,58 @@
         android:text="Bluetooth Idle"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp" />
+        android:fontFamily="@font/alata"
+        android:layout_marginTop="12dp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="#E0E0E0" />
+
+    <!-- Log label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Outgoing JSON log (latest at bottom):"
+        android:fontFamily="@font/alata"
+        android:textSize="14sp"
+        android:textColor="#444" />
+
+    <!-- Scrollable log area -->
+    <ScrollView
+        android:id="@+id/svLog"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:fontFamily="@font/alata"
+            android:textSize="13sp"
+            android:textColor="#111"
+            android:padding="8dp" />
+    </ScrollView>
+
+    <!-- Small hint -->
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ble_hint"
+        android:textSize="12sp"
+        android:fontFamily="@font/alata"
+        android:textColor="#666"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
 
 </LinearLayout>

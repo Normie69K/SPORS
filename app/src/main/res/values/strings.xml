@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">APkARiS</string>
-    <string name="app">Authenticated Phone Knowledge &amp; Anti-theft Recovery Infrastructure Solution</string>
+    <string name="app_name">SPORS</string>
+    <string name="app">Secure Phone Ownership &amp; Recovery System (SPORS)</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -10,5 +10,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="ble_hint">Tap the icon to start/stop beaconing &amp; location emission. Make sure Bluetooth &amp; Location are enabled and permissions granted.</string>
 
 </resources>
