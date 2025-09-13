@@ -8,6 +8,7 @@ import androidx.fragment.app.commit
 import com.sih.apkaris.fragements.*
 import me.ibrahimsn.lib.SmoothBottomBar
 import androidx.core.content.edit
+import com.sih.apkaris.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 

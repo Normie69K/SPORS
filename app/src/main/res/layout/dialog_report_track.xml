@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/etDeviceId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/alata"
+        android:hint="Device ID (or MAC / unique id)"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/etPhone"
+        android:fontFamily="@font/alata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your phone number (for verification)"
+        android:inputType="phone"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/etNote"
+        android:fontFamily="@font/alata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Additional note (optional)"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
