@@ -2,18 +2,17 @@ package com.sih.apkaris.fragements
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.le.*
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.ParcelUuid
 import android.provider.Settings
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Log
+import android.view.*
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -21,6 +20,8 @@ import androidx.fragment.app.Fragment
 import com.sih.apkaris.R
 import com.sih.apkaris.services.BeaconService
 import com.sih.apkaris.services.LocationService
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 class BLEFragment : Fragment() {
 
@@ -30,49 +31,49 @@ class BLEFragment : Fragment() {
     private lateinit var tvBleStatus: TextView
 
     private var isBleActive = false
-
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var enableBluetoothLauncher: ActivityResultLauncher<Intent>
+
+    private var bluetoothLeAdvertiser: BluetoothLeAdvertiser? = null
+    private var advertiseCallback: AdvertiseCallback? = null
+    private var userDeviceId: String? = null
+    private lateinit var sharedPref: android.content.SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        permissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { perms ->
-            val allGranted = perms.entries.all { it.value == true }
-            if (allGranted) {
-                val adapter = BluetoothAdapter.getDefaultAdapter()
-                if (adapter == null) {
-                    Toast.makeText(requireContext(), "Bluetooth not supported", Toast.LENGTH_SHORT).show()
-                } else if (!adapter.isEnabled) {
-                    requestEnableBluetooth()
-                } else {
-                    if (isBleActive) stopBle() else startBle()
-                }
-            } else {
-                Toast.makeText(requireContext(),
-                    "Permissions are required for BLE features. Enable them in settings.",
-                    Toast.LENGTH_LONG).show()
-            }
-        }
+        sharedPref = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+        isBleActive = sharedPref.getBoolean("bleActive", false)
 
-        enableBluetoothLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
-            if (adapter != null && adapter.isEnabled) {
-                if (!isBleActive) startBle()
-            } else {
-                Toast.makeText(requireContext(), "Bluetooth is still disabled", Toast.LENGTH_LONG).show()
+        permissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { perms ->
+                val allGranted = perms.entries.all { it.value }
+                if (allGranted) {
+                    val adapter = BluetoothAdapter.getDefaultAdapter()
+                    if (adapter == null) {
+                        Toast.makeText(requireContext(), "Bluetooth not supported", Toast.LENGTH_SHORT).show()
+                    } else if (!adapter.isEnabled) {
+                        requestEnableBluetooth()
+                    } else {
+                        if (isBleActive) stopBle() else startBle()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Permissions required for BLE features", Toast.LENGTH_LONG).show()
+                }
             }
-        }
+
+        enableBluetoothLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                val adapter = BluetoothAdapter.getDefaultAdapter()
+                if (adapter != null && adapter.isEnabled) {
+                    if (!isBleActive) startBle()
+                } else {
+                    Toast.makeText(requireContext(), "Bluetooth still disabled", Toast.LENGTH_LONG).show()
+                }
+            }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = inflater.inflate(R.layout.fragment_ble, container, false)
 
         ivBluetoothToggle = v.findViewById(R.id.ivBluetoothToggle)
@@ -80,9 +81,9 @@ class BLEFragment : Fragment() {
         svLog = v.findViewById(R.id.svLog)
         tvLog = v.findViewById(R.id.tvLog)
 
-        ivBluetoothToggle.setOnClickListener {
-            onToggleClicked()
-        }
+        ivBluetoothToggle.setOnClickListener { onToggleClicked() }
+
+        userDeviceId = sharedPref.getString("deviceId", "Device-${UUID.randomUUID().toString().take(6)}")
 
         LocationService.jsonLog.observe(viewLifecycleOwner) { json ->
             if (json != null) {
@@ -92,7 +93,11 @@ class BLEFragment : Fragment() {
         }
 
         LocationService.jsonLog.value?.let {
-            if (it.isNotEmpty()) markRunningUI()
+            if (it.isNotEmpty() && isBleActive) markRunningUI()
+        }
+
+        if (isBleActive) {
+            startBle()
         }
 
         return v
@@ -117,20 +122,21 @@ class BLEFragment : Fragment() {
 
     private fun areAllNeededPermissionsGranted(): Boolean {
         val fineGranted = ContextCompat.checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
-
         var btScanGranted = true
         var btConnectGranted = true
+        var btAdvertiseGranted = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            btScanGranted = ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.BLUETOOTH_SCAN
-            ) == PackageManager.PERMISSION_GRANTED
-            btConnectGranted = ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.BLUETOOTH_CONNECT
-            ) == PackageManager.PERMISSION_GRANTED
+            btScanGranted =
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
+            btConnectGranted =
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
+            btAdvertiseGranted =
+                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_GRANTED
         }
-        return fineGranted && btScanGranted && btConnectGranted
+        return fineGranted && btScanGranted && btConnectGranted && btAdvertiseGranted
     }
 
     private fun requestNeededPermissions() {
@@ -139,6 +145,7 @@ class BLEFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             perms.add(Manifest.permission.BLUETOOTH_SCAN)
             perms.add(Manifest.permission.BLUETOOTH_CONNECT)
+            perms.add(Manifest.permission.BLUETOOTH_ADVERTISE)
         }
         permissionLauncher.launch(perms.toTypedArray())
     }
@@ -154,58 +161,97 @@ class BLEFragment : Fragment() {
     }
 
     private fun startBle() {
-        try {
-            if (ContextCompat.checkSelfPermission(requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "Location permission required", Toast.LENGTH_LONG).show()
-                requestNeededPermissions()
-                return
-            }
-
-            val locIntent = Intent(requireContext(), LocationService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                requireContext().startForegroundService(locIntent)
-            } else {
-                requireContext().startService(locIntent)
-            }
-
-            val beaconIntent = Intent(requireContext(), BeaconService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                requireContext().startForegroundService(beaconIntent)
-            } else {
-                requireContext().startService(beaconIntent)
-            }
-
-            markRunningUI()
-            Toast.makeText(requireContext(), "BLE & location services started", Toast.LENGTH_SHORT).show()
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            Toast.makeText(requireContext(), "Failed: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+        if (!areAllNeededPermissionsGranted()) {
+            Toast.makeText(requireContext(), "All permissions required", Toast.LENGTH_LONG).show()
+            requestNeededPermissions()
+            return
         }
-    }
 
-    private fun markRunningUI() {
+        val locIntent = Intent(requireContext(), LocationService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) requireContext().startForegroundService(locIntent)
+        else requireContext().startService(locIntent)
+
+        val beaconIntent = Intent(requireContext(), BeaconService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) requireContext().startForegroundService(beaconIntent)
+        else requireContext().startService(beaconIntent)
+
+        startAdvertising()
+
         isBleActive = true
-        ivBluetoothToggle.setImageResource(R.drawable.ic_ble_active)
-        ivBluetoothToggle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.blue))
-        tvBleStatus.text = "Bluetooth Running"
+        sharedPref.edit().putBoolean("bleActive", true).apply()
+
+        markRunningUI()
+        Toast.makeText(requireContext(), "BLE started with ID: $userDeviceId", Toast.LENGTH_SHORT).show()
     }
 
     private fun stopBle() {
-        try {
-            val locIntent = Intent(requireContext(), LocationService::class.java)
-            requireContext().stopService(locIntent)
-            val beaconIntent = Intent(requireContext(), BeaconService::class.java)
-            requireContext().stopService(beaconIntent)
+        val locIntent = Intent(requireContext(), LocationService::class.java)
+        requireContext().stopService(locIntent)
+        val beaconIntent = Intent(requireContext(), BeaconService::class.java)
+        requireContext().stopService(beaconIntent)
 
-            isBleActive = false
-            ivBluetoothToggle.setImageResource(R.drawable.ic_ble_offline)
-            ivBluetoothToggle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.grey))
-            tvBleStatus.text = "Bluetooth Stopped"
-            Toast.makeText(requireContext(), "BLE & location services stopped", Toast.LENGTH_SHORT).show()
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            Toast.makeText(requireContext(), "Failed: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+        stopAdvertising()
+
+        isBleActive = false
+        sharedPref.edit().putBoolean("bleActive", false).apply()
+
+        ivBluetoothToggle.setImageResource(R.drawable.ic_ble_offline)
+        ivBluetoothToggle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.grey))
+        tvBleStatus.text = "Bluetooth Stopped"
+        Toast.makeText(requireContext(), "BLE stopped", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun markRunningUI() {
+        ivBluetoothToggle.setImageResource(R.drawable.ic_ble_active)
+        ivBluetoothToggle.setColorFilter(ContextCompat.getColor(requireContext(), R.color.blue))
+        tvBleStatus.text = "Bluetooth Running with ID: $userDeviceId"
+    }
+
+    private fun startAdvertising() {
+        val adapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothLeAdvertiser = adapter.bluetoothLeAdvertiser ?: return
+
+        val settings = AdvertiseSettings.Builder()
+            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+            .setConnectable(false)
+            .build()
+
+        val payload = "{\"userId\":\"$userDeviceId\"}"
+        val data = AdvertiseData.Builder()
+            .addServiceData(
+                ParcelUuid(UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")),
+                payload.toByteArray(StandardCharsets.UTF_8)
+            )
+            .setIncludeDeviceName(false)
+            .build()
+
+        advertiseCallback = object : AdvertiseCallback() {
+            override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
+                Log.d("BLE", "Advertising started")
+            }
+
+            override fun onStartFailure(errorCode: Int) {
+                Log.e("BLE", "Advertising failed: $errorCode")
+                Toast.makeText(requireContext(), "Advertising failed: $errorCode", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        bluetoothLeAdvertiser?.startAdvertising(settings, data, advertiseCallback)
+    }
+
+    private fun stopAdvertising() {
+        advertiseCallback?.let { bluetoothLeAdvertiser?.stopAdvertising(it) }
+        advertiseCallback = null
+    }
+
+    fun updateDeviceId(newId: String) {
+        userDeviceId = newId
+        sharedPref.edit().putString("deviceId", newId).apply()
+        if (isBleActive) {
+            stopAdvertising()
+            startAdvertising()
+            markRunningUI()
         }
     }
 }
