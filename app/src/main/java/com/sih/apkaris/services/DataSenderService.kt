@@ -14,7 +14,7 @@ class DataSenderService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val interval = 15000L // 15 seconds
-    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/" // Your backend
+    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/storeLocation" // Your backend
 
     override fun onCreate() {
         super.onCreate()

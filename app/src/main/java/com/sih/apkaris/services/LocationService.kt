@@ -42,7 +42,7 @@ class LocationService : Service() {
     private lateinit var scanner: BluetoothScanner
 
     private val sendIntervalMs = 5000L
-    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/"
+    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/storeLocation"
 
     override fun onCreate() {
         super.onCreate()
