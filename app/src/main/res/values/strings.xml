@@ -11,6 +11,6 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="ble_hint">Tap the icon to start/stop beaconing &amp; location emission. Make sure Bluetooth &amp; Location are enabled and permissions granted.</string>
-    <string name="google_maps_key">AIzaSyDdcyTrWVUO7JuUg2T1k9HKtOFtM-1JXME</string>
+    <string name="google_maps_key">AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao</string>
 
 </resources>
