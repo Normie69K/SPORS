@@ -51,7 +51,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     private var mapReady = false
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/storeLocation"
+    private val serverUrl = "https://phone-lost-and-found.vercel.app/storeLocation"
 
     private val requestLocationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) @androidx.annotation.RequiresPermission(

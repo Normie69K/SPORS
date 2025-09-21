@@ -18,13 +18,12 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import com.sih.apkaris.R
 import com.sih.apkaris.bluetooth.BluetoothScanner
-import com.sih.apkaris.models.BlePayload
-import com.sih.apkaris.models.NearbyDevice
 import com.sih.apkaris.utils.Logger
 import com.sih.apkaris.utils.NetworkUtils
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
 class LocationService : Service() {
@@ -42,7 +41,15 @@ class LocationService : Service() {
     private lateinit var scanner: BluetoothScanner
 
     private val sendIntervalMs = 5000L
-    private val serverUrl = "https://khhpmfpb-9000.inc1.devtunnels.ms/storeLocation"
+    private val serverUrl = "https://phone-lost-and-found.vercel.app/storeLocation"
+
+
+    private fun getTimestampISO8601(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.format(Date())
+    }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -104,19 +111,14 @@ class LocationService : Service() {
                 try {
                     val deviceId = getDeviceUniqueId()
                     val loc = lastLocation
-                    val nearby = scanner.snapshotNearby().map {
-                        NearbyDevice(it.first, it.second)
-                    }
 
-                    val payload = BlePayload(
-                        deviceId = deviceId,
-                        latitude = loc?.latitude,
-                        longitude = loc?.longitude,
-                        timestamp = System.currentTimeMillis(),
-                        nearby = nearby
-                    )
-
-                    val json = buildJson(payload)
+                    // The JSON payload now perfectly matches your Postman image
+                    val json = JSONObject().apply {
+                        put("deviceId", deviceId)
+                        put("latitude", loc?.latitude ?: JSONObject.NULL)
+                        put("longitude", loc?.longitude ?: JSONObject.NULL)
+                        put("timestamp", getTimestampISO8601())
+                    }.toString()
 
                     withContext(Dispatchers.IO) {
                         NetworkUtils.sendDataToServer(json, serverUrl, object : okhttp3.Callback {
@@ -131,39 +133,37 @@ class LocationService : Service() {
                             }
                         })
                     }
-
-                    scanner.clearSnapshot()
                 } catch (t: Throwable) {
                     jsonLog.postValue("sendLoop error: ${t.localizedMessage}")
                 }
-
                 delay(sendIntervalMs)
             }
         }
     }
 
 
-    private fun buildJson(p: BlePayload): String {
-        val root = JSONObject()
-        root.put("deviceId", p.deviceId)
-        root.put("timestamp", p.timestamp)
-        if (p.latitude != null && p.longitude != null) {
-            root.put("latitude", p.latitude)
-            root.put("longitude", p.longitude)
-        } else {
-            root.put("latitude", JSONObject.NULL)
-            root.put("longitude", JSONObject.NULL)
-        }
-        val arr = JSONArray()
-        for (n in p.nearby) {
-            val o = JSONObject()
-            o.put("id", n.id)
-            o.put("rssi", n.rssi)
-            arr.put(o)
-        }
-        root.put("nearby", arr)
-        return root.toString()
-    }
+//
+//    private fun buildJson(p: BlePayload): String {
+//        val root = JSONObject()
+//        root.put("deviceId", p.deviceId)
+//        root.put("timestamp", p.timestamp)
+//        if (p.latitude != null && p.longitude != null) {
+//            root.put("latitude", p.latitude)
+//            root.put("longitude", p.longitude)
+//        } else {
+//            root.put("latitude", JSONObject.NULL)
+//            root.put("longitude", JSONObject.NULL)
+//        }
+//        val arr = JSONArray()
+//        for (n in p.nearby) {
+//            val o = JSONObject()
+//            o.put("id", n.id)
+//            o.put("rssi", n.rssi)
+//            arr.put(o)
+//        }
+//        root.put("nearby", arr)
+//        return root.toString()
+//    }
 
     @SuppressLint("HardwareIds")
     private fun getDeviceUniqueId(): String {

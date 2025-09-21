@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.sih.apkaris.GetStartedActivity
+import com.sih.apkaris.MainActivity
 import com.sih.apkaris.R
 
 class ProfileFragment : Fragment() {
@@ -53,7 +54,6 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-
         sharedPref = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
 
         // UI references
@@ -73,15 +73,18 @@ class ProfileFragment : Fragment() {
         deviceIdText = view.findViewById(R.id.deviceId)
 
         // Load stored values
-        val email = sharedPref.getString("loggedInEmail", "user@email.com")
-        val username = sharedPref.getString("username", email?.substringBefore("@") ?: "Unknown User")
-        val storedDeviceId = sharedPref.getString("deviceId", "Device-01")
-
+        val username = sharedPref.getString("username", "Unknown User")
         tvUserName.text = username
-        tvUserEmail.text = email
-        tvUserPhone.text = sharedPref.getString("phone", "+91 XXXXXXX")
-        deviceIdText.text = storedDeviceId
-        currentDeviceId = storedDeviceId ?: username ?: "Unknown"
+
+//        val email = sharedPref.getString("loggedInEmail", "user@email.com")
+//        val username = sharedPref.getString("username", email?.substringBefore("@") ?: "Unknown User")
+//        val storedDeviceId = sharedPref.getString("deviceId", "Device-01")
+
+//        tvUserName.text = username
+//        tvUserEmail.text = email
+//        tvUserPhone.text = sharedPref.getString("phone", "+91 XXXXXXX")
+//        deviceIdText.text = storedDeviceId
+//        currentDeviceId = storedDeviceId ?: username ?: "Unknown"
 
         // Edit username
         ivEditName.setOnClickListener {
@@ -138,15 +141,22 @@ class ProfileFragment : Fragment() {
         }
 
         // Logout
+//        btnLogout.setOnClickListener {
+//            sharedPref.edit().clear().apply()
+//            val intent = Intent(requireContext(), GetStartedActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            startActivity(intent)
+//        }
+//
+//        return view
+//    }
         btnLogout.setOnClickListener {
-            sharedPref.edit().clear().apply()
-            val intent = Intent(requireContext(), GetStartedActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            // Call the central logout function in MainActivity
+            (activity as? MainActivity)?.logout()
         }
-
         return view
     }
+
 
     private fun showEditDialog(title: String, currentValue: String, onSave: (String) -> Unit) {
         val input = EditText(requireContext()).apply {
@@ -221,6 +231,7 @@ class ProfileFragment : Fragment() {
         tvSimOperator.text = "SIM Operator: $operator"
     }
 
+    @RequiresPermission("android.permission.READ_PRIVILEGED_PHONE_STATE")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
