@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateTo(fragment: Fragment, addToBackStack: Boolean = true) {
+    fun navigateTo(fragment: Fragment, addToBackStack: Boolean = true) {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragmentContainer, fragment)
