@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="off_white">#FAF7F3</color>
-    <!-- Primary Brand Colors -->
-    <color name="blue">#33A1E0</color>
-    <color name="dark_blue">#34699A</color>
-    <color name="grey">#A29E9E</color>
-    <color name="grey_500">#CCBEBE</color>
+    <color name="dark_blue_app_background">#0A192F</color>
+    <color name="primary_blue_button">#2437A1</color>
+    <color name="light_blue_text_link">#3366CC</color>
+    <color name="privacy_box_blue">#4A64A1</color>
 
-    <color name="colorPrimaryDark">#9E0101</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="dark_grey_text">#AAAAAA</color>
 
-    <color name="sb_background">#FFFFFF</color>         <!-- white background -->
-    <color name="sb_accent">#33A1E0</color>           <!-- bright blue accent -->
-    <color name="sb_icon_inactive">#9E9E9E</color>    <!-- gray for inactive icons -->
-    <color name="sb_text">#212121</color>             <!-- dark gray for text -->
-
-
-
+    <color name="input_field_background">#1A2A47</color>
+    <color name="input_field_border">#334766</color>
+    <color name="google_blue">#4285F4</color>
 </resources>

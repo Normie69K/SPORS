@@ -1,227 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:background="@color/dark_blue_app_background"
+    tools:context=".fragements.ProfileFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:spacing="16dp">
+        android:padding="16dp">
 
-        <!-- User Info Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@android:color/white"
-            android:elevation="6dp"
-            app:cardCornerRadius="16dp">
+        <ImageView
+            android:id="@+id/ivProfileIcon"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+        <TextView
+            android:id="@+id/tvUserName"
+            style="@style/MyScreenTitle"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="User Name"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/ivEditName"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivProfileIcon" />
 
-                <ImageView
-                    android:id="@+id/ivProfileIcon"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/profile"
-                    android:contentDescription="Profile Icon"
-                    android:layout_marginBottom="12dp"
-                    android:padding="6dp" />
+        <ImageView
+            android:id="@+id/ivEditName"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUserName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvUserName"
+            app:layout_constraintTop_toTopOf="@+id/tvUserName"
+            app:tint="@color/light_blue_text_link" />
 
-                <!-- Editable Username Row -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="4dp">
+        <TextView
+            android:id="@+id/tvUserEmail"
+            style="@style/MyBodyText"
+            android:layout_marginTop="4dp"
+            android:text="user@email.com"
+            android:textColor="@color/dark_grey_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
-                    <TextView
-                        android:id="@+id/tvUserName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:fontFamily="@font/alata"
-                        android:text="User Name"
-                        android:textColor="#212121"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/titleDeviceInfo"
+            style="@style/MySectionTitle"
+            android:layout_width="0dp"
+            android:layout_marginTop="32dp"
+            android:gravity="start"
+            android:text="Device Information"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvUserEmail" />
 
-                    <ImageView
-                        android:id="@+id/ivEditName"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_edit"
-                        android:contentDescription="Edit Name"
-                        app:tint="#2196F3" />
-                </LinearLayout>
+        <TextView
+            android:id="@+id/tvDeviceModel"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleDeviceInfo"
+            tools:text="Model: Pixel 7 Pro" />
 
-                <TextView
-                    android:id="@+id/tvUserEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/alata"
-                    android:text="user@email.com"
-                    android:textColor="#666"
-                    android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvDeviceManufacturer"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDeviceModel"
+            tools:text="Manufacturer: Google" />
 
-                <TextView
-                    android:id="@+id/tvUserPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/alata"
-                    android:text="Phone: +91 9876543210"
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tvAndroidVersion"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDeviceManufacturer"
+            tools:text="Android Version: 13" />
 
-        <!-- Device Info Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@android:color/white"
-            android:elevation="6dp"
-            app:cardCornerRadius="16dp">
+        <TextView
+            android:id="@+id/tvIMEI"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAndroidVersion"
+            tools:text="Device ID: a1b2c3d4e5f6" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+        <TextView
+            android:id="@+id/tvUserPhone"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvIMEI"
+            tools:text="Phone: +91 9876543210" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/alata"
-                    android:text="Device Information"
-                    android:textColor="#212121"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvSimOperator"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvUserPhone"
+            tools:text="SIM Operator: Airtel" />
 
-                <!-- Editable Device ID Row -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/tvBatteryLevel"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSimOperator"
+            tools:text="Battery: 85%" />
 
-                    <TextView
-                        android:id="@+id/deviceId"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/alata"
-                        android:text="Device-01"
-                        android:textColor="#444"
-                        android:textSize="15sp"
-                        android:layout_marginEnd="8dp" />
+        <TextView
+            android:id="@+id/tvStorageInfo"
+            style="@style/MyBodyText.White"
+            android:layout_width="0dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBatteryLevel"
+            tools:text="Storage: 50.5 GB free / 128 GB" />
 
-                    <ImageView
-                        android:id="@+id/EdtDevice"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_edit"
-                        android:contentDescription="Edit Device ID"
-                        app:tint="#2196F3" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvDeviceModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="Model: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvDeviceManufacturer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="Manufacturer: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvAndroidVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="Android Version: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvIMEI"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="IMEI/Device ID: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvSimOperator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="SIM Operator: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvBatteryLevel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="Battery: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tvStorageInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
-                    android:text="Storage: "
-                    android:textColor="#444"
-                    android:textSize="15sp" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Logout Button -->
         <Button
             android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/blue_bg_color"
-            android:fontFamily="@font/alata"
-            android:padding="12dp"
+            style="@style/MyPrimaryButton"
+            android:layout_width="0dp"
+            android:layout_marginTop="32dp"
             android:text="Logout"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStorageInfo" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

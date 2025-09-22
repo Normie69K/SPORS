@@ -1,173 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_blue_app_background"
+    tools:context=".fragments.HomeFragment"
     android:fillViewport="true">
 
-    <RelativeLayout
-        android:id="@+id/homeRoot"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:layout_height="wrap_content">
 
-        <!-- Profile Header -->
-        <LinearLayout
-            android:id="@+id/profileHeader"
+        <ImageButton
+            android:id="@+id/button_settings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Settings"
+            android:src="@drawable/profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/text_view_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="WELCOME TO"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_spors_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="SPORS"
+            android:textColor="@color/white"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_welcome" />
+
+        <TextView
+            android:id="@+id/text_view_tagline"
+            style="@style/MyBodyText.White.Center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
+            android:text="Find lost items securely with a community-powered network."
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_spors_logo" />
+
+        <Button
+            android:id="@+id/button_report_lost"
+            style="@style/MyPrimaryButton"
+            android:layout_marginTop="48dp"
+            android:text="Report Lost Device"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_tagline" />
+
+        <Button
+            android:id="@+id/button_find_my_device"
+            style="@style/MyPrimaryButton"
+            android:layout_marginTop="16dp"
+            android:text="Find My Device"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_report_lost" />
+
+        <Button
+            android:id="@+id/button_help_find"
+            style="@style/MyPrimaryButton"
+            android:layout_marginTop="16dp"
+            android:text="Help Find Devices"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_find_my_device" />
+
+        <Button
+            android:id="@+id/button_report_found"
+            style="@style/MyPrimaryButton"
+            android:layout_marginTop="16dp"
+            android:text="Report Found Devices"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_help_find" />
+
+        <TextView
+            android:id="@+id/text_view_protect_title"
+            style="@style/MySectionTitle"
+            android:layout_marginTop="48dp"
+            android:text="Ready to Protect Your Devices?"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_report_found" />
+
+        <TextView
+            android:id="@+id/text_view_protect_description"
+            style="@style/MyBodyText.White.Center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
+            android:text="Join thousands of users who trust FindMyNet to keep their devices safe."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_protect_title" />
+
+        <TextView
+            android:id="@+id/text_view_how_it_works_title"
+            style="@style/MySectionTitle"
+            android:layout_marginTop="48dp"
+            android:text="How It Works"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_protect_description" />
+
+        <TextView
+            android:id="@+id/text_view_how_it_works_description"
+            style="@style/MyBodyText.White.Center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
+            android:text="Our network uses advanced technology to help you find your devices while maintaining complete privacy."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_how_it_works_title" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="@color/white"
-            android:elevation="4dp">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/profile"
-                android:contentDescription="avatar"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center_vertical" />
+            android:layout_height="200dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/primary_blue_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_how_it_works_description">
 
             <LinearLayout
+                android:id="@+id/layout_features"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="12dp"
-                android:layout_gravity="center_vertical">
+                android:gravity="start"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/layout_support"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.6">
 
                 <TextView
-                    android:fontFamily="@font/alata"
-                    android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Name"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Features"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:fontFamily="@font/alata"
-                    android:id="@+id/tvUserStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Active Now"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/holo_green_dark" />
+                    android:fontFamily="@font/poppins"
+                    android:text="End-to-end encryption"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Anonymous tracking"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Community network"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
             </LinearLayout>
-        </LinearLayout>
-
-        <!-- Map -->
-        <fragment
-            android:id="@+id/mapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_below="@id/profileHeader"
-            android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_marginTop="8dp" />
-
-        <!-- Login History card -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardLoginHistory"
-            android:layout_below="@id/mapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/layout_support"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:gravity="start"
+                android:layout_marginStart="48dp"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintStart_toEndOf="@+id/layout_features"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.6">
 
                 <TextView
-                    android:fontFamily="@font/alata"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Previous Logins"
-                    android:textStyle="bold"
-                    android:textSize="15sp" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Support"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
-                <LinearLayout
-                    android:id="@+id/layoutLoginHistory"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="6dp" />
+                    android:fontFamily="@font/poppins"
+                    android:text="Need help? Contact our"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="support team for assistance"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="with your devices."
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <!-- Report / Track card -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardReport"
-            android:layout_below="@id/cardLoginHistory"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_view_copyright"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/poppins"
+                android:text="© 2024 FindMyNet. All rights reserved. Privacy-first device tracking."
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:fontFamily="@font/alata"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Device Actions"
-                    android:textStyle="bold"
-                    android:textSize="15sp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <Button
-                    android:id="@+id/btnReportLost"
-                    android:layout_width="match_parent"
-                    android:fontFamily="@font/alata"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:background="@drawable/blue_bg_color"
-                    android:text="Report Lost / Forgotten"
-                    android:layout_marginTop="8dp" />
-
-                <Button
-                    android:id="@+id/btnTrackDevice"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/alata"
-                    android:layout_width="match_parent"
-                    android:background="@drawable/blue_bg_color"
-                    android:layout_height="wrap_content"
-                    android:text="Track Device"
-                    android:layout_marginTop="8dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- simple tip -->
-        <TextView
-            android:id="@+id/tvSecurityTip"
-            android:layout_below="@id/cardReport"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:background="#FFF3CD"
-            android:text="Tip: Keep location and Bluetooth permissions enabled for real-time tracking."
-            android:textSize="13sp" />
-
-        <!-- Floating refresh -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_popup_sync"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="16dp" />
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

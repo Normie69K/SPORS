@@ -2,7 +2,6 @@ package com.sih.apkaris.services
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
@@ -12,17 +11,16 @@ import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import com.sih.apkaris.R
-import com.sih.apkaris.bluetooth.BluetoothScanner
+import com.sih.apkaris.network.LocationUpdateRequest
+import com.sih.apkaris.network.RetrofitClient
 import com.sih.apkaris.utils.Logger
-import com.sih.apkaris.utils.NetworkUtils
 import kotlinx.coroutines.*
-import org.json.JSONArray
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,70 +32,38 @@ class LocationService : Service() {
     }
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
     private lateinit var fused: FusedLocationProviderClient
     private var lastLocation: Location? = null
-
-    private lateinit var scanner: BluetoothScanner
-
     private val sendIntervalMs = 5000L
-    private val serverUrl = "https://phone-lost-and-found.vercel.app/storeLocation"
-
-
-    private fun getTimestampISO8601(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        return sdf.format(Date())
-    }
-
 
     override fun onCreate() {
         super.onCreate()
-        Logger.d("LocationService onCreate")
         fused = LocationServices.getFusedLocationProviderClient(this)
-        scanner = BluetoothScanner(this)
-
         createChannelAndForeground()
         startLocationUpdates()
-        scanner.startScanning()
         startSendLoop()
     }
 
     private fun createChannelAndForeground() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nm = getSystemService(NotificationManager::class.java)
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "BLE / Location",
-                NotificationManager.IMPORTANCE_LOW
-            )
+            val channel = NotificationChannel(CHANNEL_ID, "BLE / Location", NotificationManager.IMPORTANCE_LOW)
             nm.createNotificationChannel(channel)
         }
-
-        val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("APkARiS — Tracking")
-            .setContentText("Sending BLE & location data")
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("SPORS — Tracking Active")
+            .setContentText("Broadcasting location for device safety.")
             .setSmallIcon(R.drawable.ic_ble_active)
             .setOngoing(true)
             .build()
-
         startForeground(1001, notification)
     }
 
     private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            Logger.e("No location permission, stopping updates")
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
-
-        val req = LocationRequest.Builder(
-            Priority.PRIORITY_BALANCED_POWER_ACCURACY, 3000L
-        )
-            .setMinUpdateIntervalMillis(2000L)
-            .build()
-
+        val req = LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 3000L).build()
         fused.requestLocationUpdates(req, object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 lastLocation = result.lastLocation
@@ -109,76 +75,41 @@ class LocationService : Service() {
         scope.launch {
             while (isActive) {
                 try {
-                    val deviceId = getDeviceUniqueId()
                     val loc = lastLocation
+                    val request = LocationUpdateRequest(
+                        deviceId = getDeviceUniqueId(),
+                        latitude = loc?.latitude,
+                        longitude = loc?.longitude,
+                        timestamp = getTimestampISO8601()
+                    )
 
-                    // The JSON payload now perfectly matches your Postman image
-                    val json = JSONObject().apply {
-                        put("deviceId", deviceId)
-                        put("latitude", loc?.latitude ?: JSONObject.NULL)
-                        put("longitude", loc?.longitude ?: JSONObject.NULL)
-                        put("timestamp", getTimestampISO8601())
-                    }.toString()
-
-                    withContext(Dispatchers.IO) {
-                        NetworkUtils.sendDataToServer(json, serverUrl, object : okhttp3.Callback {
-                            override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                                LocationService.jsonLog.postValue("Server FAILED: ${e.message}\n$json\n")
-                            }
-
-                            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                                val body = response.body?.string() ?: ""
-                                LocationService.jsonLog.postValue("Server SUCCESS: $body\n$json\n")
-                                response.close()
-                            }
-                        })
+                    val response = RetrofitClient.instance.updateLocation(request)
+                    if (response.isSuccessful) {
+                        Logger.d("Location updated successfully")
+                    } else {
+                        Logger.e("Location update failed: ${response.errorBody()?.string()}")
                     }
-                } catch (t: Throwable) {
-                    jsonLog.postValue("sendLoop error: ${t.localizedMessage}")
+                } catch (e: Exception) {
+                    Logger.e("Location update exception", e)
                 }
                 delay(sendIntervalMs)
             }
         }
     }
 
-
-//
-//    private fun buildJson(p: BlePayload): String {
-//        val root = JSONObject()
-//        root.put("deviceId", p.deviceId)
-//        root.put("timestamp", p.timestamp)
-//        if (p.latitude != null && p.longitude != null) {
-//            root.put("latitude", p.latitude)
-//            root.put("longitude", p.longitude)
-//        } else {
-//            root.put("latitude", JSONObject.NULL)
-//            root.put("longitude", JSONObject.NULL)
-//        }
-//        val arr = JSONArray()
-//        for (n in p.nearby) {
-//            val o = JSONObject()
-//            o.put("id", n.id)
-//            o.put("rssi", n.rssi)
-//            arr.put(o)
-//        }
-//        root.put("nearby", arr)
-//        return root.toString()
-//    }
+    private fun getTimestampISO8601(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.format(Date())
+    }
 
     @SuppressLint("HardwareIds")
     private fun getDeviceUniqueId(): String {
-        return Settings.Secure.getString(
-            contentResolver,
-            Settings.Secure.ANDROID_ID
-        ) ?: UUID.randomUUID().toString()
+        return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID) ?: UUID.randomUUID().toString()
     }
 
     override fun onDestroy() {
         scope.cancel()
-        try {
-            scanner.stopScanning()
-        } catch (_: Throwable) {
-        }
         super.onDestroy()
     }
 

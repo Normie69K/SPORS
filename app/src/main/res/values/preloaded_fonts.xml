@@ -9,6 +9,8 @@
         <item>@font/alkalami</item>
         <item>@font/open_sans_bold</item>
         <item>@font/open_sans_light</item>
+        <item>@font/poppins</item>
+        <item>@font/poppins_bold</item>
         <item>@font/poppins_medium</item>
         <item>@font/poppins_thin</item>
     </array>

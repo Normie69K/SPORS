@@ -2,119 +2,68 @@ package com.sih.apkaris
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.sih.apkaris.fragements.*
 import com.sih.apkaris.fragments.HomeFragment
-import me.ibrahimsn.lib.SmoothBottomBar
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var bottomBar: SmoothBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        bottomBar = findViewById(R.id.bottomBar)
-
-        // On app start, check if a session token is already saved
         val sharedPref = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
         val sessionToken = sharedPref.getString("token", null)
 
         if (sessionToken != null) {
-            // Token found, user is already logged in
             showHomeUI()
         } else {
-            // No token, user needs to log in
-            if (savedInstanceState == null) { // Prevents re-adding fragment on rotation
+            if (savedInstanceState == null) {
                 showLoginFragment()
             }
         }
+    }
 
-        // Handle navigation clicks on the bottom bar
-        bottomBar.onItemSelected = { position ->
-            when (position) {
-                0 -> showProfileFragment()
-                1 -> showHomeFragment()
-                2 -> showBleFragment()
-                // Add more cases if you have more tabs
+    private fun navigateTo(fragment: Fragment, addToBackStack: Boolean = true) {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragmentContainer, fragment)
+            if (addToBackStack) {
+                addToBackStack(fragment::class.java.simpleName)
             }
         }
     }
 
-    // --- Navigation Functions ---
-
     fun showLoginFragment() {
-        hideBottomBar() // Ensure bottom bar is hidden on the login screen
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, LoginFragment())
-        }
+        navigateTo(LoginFragment(), addToBackStack = false)
     }
 
-    fun showRegisterFragment() {
-        hideBottomBar() // Ensure bottom bar is hidden on the register screen
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, RegisterFragment())
-        }
+    fun showSignUpFragment(addToBackStack: Boolean = true) {
+        navigateTo(SignUpFragment(), addToBackStack)
     }
 
-    private fun showHomeFragment() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, HomeFragment())
-        }
+    fun showHomeFragment(addToBackStack: Boolean = true) {
+        navigateTo(HomeFragment(), addToBackStack)
     }
 
-    private fun showProfileFragment() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, ProfileFragment())
-        }
-    }
+    fun showReportLostFragment() = navigateTo(ReportLostFragment())
+    fun showFindMyDeviceFragment() = navigateTo(FindMyDeviceFragment())
+    fun showHelpFindFragment() = navigateTo(HelpFindFragment())
+    fun showReportFoundFragment() = navigateTo(ReportFoundFragment())
+    fun showProfileFragment() = navigateTo(ProfileFragment())
+    fun showForgotPasswordFragment() = navigateTo(ForgotPasswordFragment())
+    fun showVerificationFragment() = navigateTo(VerificationFragment())
+    fun showCreateNewPasswordFragment() = navigateTo(CreateNewPasswordFragment())
 
-    private fun showBleFragment() {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragmentContainer, BLEFragment())
-        }
-    }
-
-    // --- UI State Management ---
-
-    /**
-     * This is called from LoginFragment after a successful API login.
-     * It transitions the app to the main "logged-in" state.
-     */
     fun showHomeUI() {
-        showBottomBar()
-        bottomBar.itemActiveIndex = 1 // Set Home as the selected tab
-        showHomeFragment()
+        showHomeFragment(addToBackStack = false)
     }
 
-    /**
-     * Call this function from a fragment (e.g., ProfileFragment) to log the user out.
-     */
     fun logout() {
-        // Clear all saved data from SharedPreferences
-        val sharedPref = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-        sharedPref.edit {
-            clear()
-        }
-
-        // Go back to the login screen
+        getSharedPreferences("userPrefs", Context.MODE_PRIVATE).edit { clear() }
         showLoginFragment()
-    }
-
-    private fun showBottomBar() {
-        bottomBar.visibility = View.VISIBLE
-    }
-
-    private fun hideBottomBar() {
-        bottomBar.visibility = View.GONE
     }
 }

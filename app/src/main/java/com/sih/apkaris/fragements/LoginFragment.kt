@@ -6,60 +6,47 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.sih.apkaris.MainActivity
-import com.sih.apkaris.R
+import com.sih.apkaris.databinding.FragmentLoginBinding
 import com.sih.apkaris.network.LoginRequest
 import com.sih.apkaris.network.RetrofitClient
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    private lateinit var etUsername: TextInputEditText
-    private lateinit var etPassword: TextInputEditText
-    private lateinit var btnContinue: Button
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // --- FIXED --- Correctly finding the views by their proper IDs from the XML
-        etUsername = view.findViewById(R.id.etUsername)
-        etPassword = view.findViewById(R.id.etPassword)
-        btnContinue = view.findViewById(R.id.btnContinue)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val tvSignUp = view.findViewById<TextView>(R.id.tvSignUp)
-        val tvSignUpHint = view.findViewById<TextView>(R.id.tvSignUpHint)
+        binding.buttonLogin.setOnClickListener {
+            val email = binding.editTextEmail.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
 
-        // --- ADDED --- Click listener for the top "Sign Up" toggle
-        tvSignUp.setOnClickListener {
-            (activity as? MainActivity)?.showRegisterFragment()
-        }
-
-        // Listener for the bottom "Don't have an account?" text
-        tvSignUpHint.setOnClickListener {
-            (activity as? MainActivity)?.showRegisterFragment()
-        }
-
-        btnContinue.setOnClickListener {
-            val username = etUsername.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter username and password", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            loginUser(username, password)
+            loginUser(email, password)
         }
-        return view
+
+        binding.textViewSignupLink.setOnClickListener {
+            (activity as? MainActivity)?.showSignUpFragment()
+        }
+
+        binding.textViewForgotPassword.setOnClickListener {
+            (activity as? MainActivity)?.showForgotPasswordFragment()
+        }
     }
 
     private fun loginUser(username: String, password: String) {
@@ -70,28 +57,28 @@ class LoginFragment : Fragment() {
 
                 if (response.isSuccessful && response.body()?.success == true) {
                     val loginData = response.body()!!
-
                     val sharedPref = requireActivity().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
                     with(sharedPref.edit()) {
                         putString("token", loginData.token)
-                        putString("username", username) // Save the username
-                        // Save the list of devices as a JSON string
+                        putString("username", username)
                         putString("devices", Gson().toJson(loginData.user?.devices))
                         apply()
                     }
-
                     Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
                     (activity as? MainActivity)?.showHomeUI()
-
                 } else {
                     val errorMessage = response.body()?.message ?: "Invalid credentials."
                     Toast.makeText(requireContext(), "Login Failed: $errorMessage", Toast.LENGTH_LONG).show()
                 }
-
             } catch (e: Exception) {
                 Log.e("LoginFragment", "API call failed", e)
-                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

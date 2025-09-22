@@ -6,15 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_blue_app_background"
-    tools:context=".fragments.LoginFragment">
+    tools:context=".fragements.SignUpFragment">
 
     <TextView
-        android:id="@+id/text_view_login_title"
+        android:id="@+id/text_view_signup_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="LOGIN"
+        android:text="SIGN UP"
         android:textColor="@color/white"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,19 +28,19 @@
         android:hint="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_login_title">
+        app:layout_constraintTop_toBottomOf="@+id/text_view_signup_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_email"
             style="@style/MyTextInputEditText"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_password"
         style="@style/MyTextInputLayout"
         android:layout_marginTop="16dp"
-        android:hint="Your password"
+        android:hint="Create your password"
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,29 +49,18 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_password"
             style="@style/MyTextInputEditText"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/text_view_forgot_password"
-        style="@style/MyTextLink"
-        android:layout_marginTop="8dp"
-        android:text="Forgot Password?"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/input_layout_password"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
-
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_create_account"
         style="@style/MyPrimaryButton"
         android:layout_marginTop="32dp"
-        android:text="Login"
+        android:text="Create account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_forgot_password" />
+        app:layout_constraintTop_toBottomOf="@+id/input_layout_password" />
 
     <Button
         android:id="@+id/button_google_signin"
@@ -80,31 +69,30 @@
         android:text="Continue with Google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+        app:layout_constraintTop_toBottomOf="@+id/button_create_account" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="32dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_google_signin">
 
         <TextView
-            android:id="@+id/text_view_no_account"
+            android:id="@+id/text_view_already_account"
             style="@style/MyBodyText.Medium"
-            android:text="Don't Have an Account? "
+            android:text="Already Have an Account? "
             android:textColor="@color/white"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/text_view_signup_link"
+            android:id="@+id/text_view_login_link"
             style="@style/MyTextLink"
-            android:text="Sign Up"
+            android:text="Log In"
             android:textSize="14sp" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
