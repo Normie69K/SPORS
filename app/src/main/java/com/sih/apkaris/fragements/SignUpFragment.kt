@@ -39,11 +39,11 @@ class SignUpFragment : Fragment() {
     }
 
     private fun validateInput(): Boolean {
-        if (binding.editTextEmail.text.toString().isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(binding.editTextEmail.text.toString()).matches()) {
-            binding.inputLayoutEmail.error = "Enter a valid email"
+        if (binding.editTextUsername.text.toString().isBlank()) {
+            binding.inputLayoutUsername.error = "Username is required"
             return false
         } else {
-            binding.inputLayoutEmail.error = null
+            binding.inputLayoutUsername.error = null
         }
 
         if (binding.editTextPassword.text.toString().length < 6) {
@@ -56,12 +56,16 @@ class SignUpFragment : Fragment() {
     }
 
     private fun registerUser() {
-        val email = binding.editTextEmail.text.toString().trim()
-        val password = binding.editTextPassword.text.toString().trim()
-
+        showLoading(true)
         lifecycleScope.launch {
             try {
-                val request = RegisterRequest(username = email, contact = null, address = null, password = password)
+                val request = RegisterRequest(
+                    username = binding.editTextUsername.text.toString().trim(),
+                    contact = binding.editTextContact.text.toString().trim(),
+                    address = binding.editTextAddress.text.toString().trim(),
+                    password = binding.editTextPassword.text.toString().trim()
+                )
+
                 val response = RetrofitClient.instance.registerUser(request)
 
                 if (response.isSuccessful && response.body()?.success == true) {
@@ -75,7 +79,21 @@ class SignUpFragment : Fragment() {
             } catch (e: Exception) {
                 Log.e("SignUpFragment", "API call failed", e)
                 Toast.makeText(requireContext(), "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
+            } finally {
+                showLoading(false)
             }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.buttonCreateAccount.isEnabled = false
+            binding.buttonGoogleSignin.isEnabled = false
+        } else {
+            binding.progressBar.visibility = View.GONE
+            binding.buttonCreateAccount.isEnabled = true
+            binding.buttonGoogleSignin.isEnabled = true
         }
     }
 

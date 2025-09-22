@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark_blue_app_background"
     android:fillViewport="true"
-    tools:context=".fragments.FindMyDeviceFragment">
+    tools:context=".fragements.FindMyDeviceFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,15 +75,12 @@
             android:layout_marginTop="16dp"
             android:hint="Enter Your Device ID"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textColorHint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_divider">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_device_id"
                 style="@style/MyTextInputEditText"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 

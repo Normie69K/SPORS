@@ -22,6 +22,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as? MainActivity
 
+        binding.buttonSettings.setOnClickListener {
+            mainActivity?.showProfileFragment()
+        }
         binding.buttonReportLost.setOnClickListener {
             mainActivity?.showReportLostFragment()
         }

@@ -18,8 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.sih.apkaris.MainActivity
@@ -31,7 +32,19 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedPref: SharedPreferences
-    private val REQUEST_PHONE_STATE = 1001
+
+    // New, modern way to handle permission requests
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            // Check if either of the required permissions was granted
+            if (permissions[Manifest.permission.READ_PHONE_STATE] == true || permissions[Manifest.permission.READ_PHONE_NUMBERS] == true) {
+                showPhoneInfo()
+            } else {
+                Toast.makeText(requireContext(), "Phone state permission denied.", Toast.LENGTH_SHORT).show()
+                binding.tvUserPhone.text = "Phone: Permission Denied"
+                binding.tvSimOperator.text = "SIM Operator: Permission Denied"
+            }
+        }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -44,12 +57,12 @@ class ProfileFragment : Fragment() {
 
         loadUserInfo()
         displayDeviceInfo()
-        checkPhonePermissions()
+        checkAndShowPhoneInfo() // Updated function call
 
         binding.ivEditName.setOnClickListener {
             showEditDialog("Edit Username", binding.tvUserName.text.toString()) { newName ->
                 binding.tvUserName.text = newName
-                sharedPref.edit { putString("username", newName) }
+                sharedPref.edit { putString("displayName", newName) } // Save as displayName
             }
         }
 
@@ -81,20 +94,32 @@ class ProfileFragment : Fragment() {
         binding.tvStorageInfo.text = String.format("Storage: %.1f GB free / %.1f GB", freeGB, totalGB)
     }
 
-    private fun checkPhonePermissions() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+    private fun checkAndShowPhoneInfo() {
+        // Check for either permission
+        val hasPhoneStatePerm = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+        val hasPhoneNumbersPerm = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED
+
+        if (hasPhoneStatePerm || hasPhoneNumbersPerm) {
             showPhoneInfo()
         } else {
-            requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
+            // Request both permissions for better compatibility
+            requestPermissionLauncher.launch(arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_NUMBERS))
         }
     }
 
-    @SuppressLint("HardwareIds", "MissingPermission")
+    @SuppressLint("HardwareIds")
     private fun showPhoneInfo() {
+        // Double-check permission right before the call to be extra safe
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
+            return // Exit if permissions are somehow revoked
+        }
+
         val tm = requireContext().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val deviceId = Settings.Secure.getString(requireContext().contentResolver, Settings.Secure.ANDROID_ID)
 
         binding.tvIMEI.text = "Device ID: $deviceId"
+        // This is the line that can crash - now it's protected
         binding.tvUserPhone.text = "Phone: ${tm.line1Number ?: "Not Available"}"
         binding.tvSimOperator.text = "SIM Operator: ${tm.simOperatorName ?: "Not Available"}"
     }
@@ -107,15 +132,6 @@ class ProfileFragment : Fragment() {
             .setPositiveButton("Save") { _, _ -> onSave(input.text.toString().trim()) }
             .setNegativeButton("Cancel", null)
             .show()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_PHONE_STATE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            showPhoneInfo()
-        } else {
-            Toast.makeText(requireContext(), "Phone state permission denied.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onDestroyView() {
