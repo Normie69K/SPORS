@@ -86,6 +86,7 @@
                 android:id="@+id/autocomplete_text_view_device"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
                 android:textColorHint="@color/dark_grey_text"
                 android:inputType="none"
                 android:textColor="@color/white"/>

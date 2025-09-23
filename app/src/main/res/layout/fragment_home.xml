@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Settings button (top right) -->
         <ImageButton
             android:id="@+id/button_settings"
             android:layout_width="48dp"
@@ -26,6 +27,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
+        <!-- Theme switcher button (top left) -->
+        <ImageButton
+            android:id="@+id/button_theme_switcher"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Switch Theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white"
+            tools:src="@drawable/ic_moon" />
+
+        <!-- Welcome text -->
         <TextView
             android:id="@+id/text_view_welcome"
             android:layout_width="wrap_content"
@@ -39,6 +55,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- SPORS Logo -->
         <TextView
             android:id="@+id/text_view_spors_logo"
             android:layout_width="wrap_content"
@@ -49,8 +66,9 @@
             android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_welcome" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_welcome" />
 
+        <!-- Tagline -->
         <TextView
             android:id="@+id/text_view_tagline"
             style="@style/MyBodyText.White.Center"
@@ -63,8 +81,9 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_spors_logo" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_spors_logo" />
 
+        <!-- Buttons -->
         <Button
             android:id="@+id/button_report_lost"
             style="@style/MyPrimaryButton"
@@ -72,7 +91,7 @@
             android:text="Report Lost Device"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_tagline" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_tagline" />
 
         <Button
             android:id="@+id/button_find_my_device"
@@ -81,7 +100,7 @@
             android:text="Find My Device"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_report_lost" />
+            app:layout_constraintTop_toBottomOf="@id/button_report_lost" />
 
         <Button
             android:id="@+id/button_help_find"
@@ -90,7 +109,7 @@
             android:text="Help Find Devices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_find_my_device" />
+            app:layout_constraintTop_toBottomOf="@id/button_find_my_device" />
 
         <Button
             android:id="@+id/button_report_found"
@@ -99,8 +118,9 @@
             android:text="Report Found Devices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_help_find" />
+            app:layout_constraintTop_toBottomOf="@id/button_help_find" />
 
+        <!-- Protect section -->
         <TextView
             android:id="@+id/text_view_protect_title"
             style="@style/MySectionTitle"
@@ -108,7 +128,7 @@
             android:text="Ready to Protect Your Devices?"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_report_found" />
+            app:layout_constraintTop_toBottomOf="@id/button_report_found" />
 
         <TextView
             android:id="@+id/text_view_protect_description"
@@ -121,8 +141,9 @@
             android:text="Join thousands of users who trust FindMyNet to keep their devices safe."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_protect_title" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_protect_title" />
 
+        <!-- How it works section -->
         <TextView
             android:id="@+id/text_view_how_it_works_title"
             style="@style/MySectionTitle"
@@ -130,7 +151,7 @@
             android:text="How It Works"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_protect_description" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_protect_description" />
 
         <TextView
             android:id="@+id/text_view_how_it_works_description"
@@ -143,17 +164,15 @@
             android:text="Our network uses advanced technology to help you find your devices while maintaining complete privacy."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_how_it_works_title" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_how_it_works_title" />
 
+        <!-- Footer -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="48dp"
             android:background="@color/primary_blue_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_how_it_works_description">
+            app:layout_constraintTop_toBottomOf="@id/text_view_how_it_works_description">
 
             <LinearLayout
                 android:id="@+id/layout_features"
@@ -161,11 +180,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="start"
-                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/layout_support"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.6">
 
                 <TextView
@@ -208,10 +227,10 @@
                 android:orientation="vertical"
                 android:gravity="start"
                 android:layout_marginStart="48dp"
-                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/layout_features"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
                 app:layout_constraintVertical_bias="0.6">
 
                 <TextView
@@ -229,6 +248,7 @@
                     android:text="Need help? Contact our"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -236,6 +256,7 @@
                     android:text="support team for assistance"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -255,8 +276,8 @@
                 android:textColor="@color/white"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

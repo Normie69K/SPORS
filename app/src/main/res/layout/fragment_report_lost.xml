@@ -82,6 +82,7 @@
                 android:id="@+id/edit_text_device_id"
                 style="@style/MyTextInputEditText"
                 android:textColorHint="@color/white"
+                android:fontFamily="@font/poppins"
                 android:textColor="@color/white"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
