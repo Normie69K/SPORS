@@ -90,15 +90,24 @@ class FindMyDeviceFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun fetchDeviceLocationFromServer(device: Device) {
-        Toast.makeText(context, "Fetching location history for ${device.devicename}...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Fetching last location for ${device.devicename}...", Toast.LENGTH_SHORT).show()
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getDeviceLocationHistory(device.deviceid)
                 if (response.isSuccessful && response.body()?.success == true) {
                     val locationHistory = response.body()?.data
                     if (!locationHistory.isNullOrEmpty()) {
-                        updateMapWithSinglePoint(locationHistory[0], device)
-//                        updateMapWithHistory(locationHistory, device)
+
+                        // --- LOGIC CHANGE IS HERE ---
+                        // Find the most recent location by sorting the list by timestamp in descending order
+                        val mostRecentPoint = locationHistory.maxByOrNull { it.timestamp }
+
+                        if (mostRecentPoint != null) {
+                            updateMapWithSinglePoint(mostRecentPoint, device)
+                        } else {
+                            Toast.makeText(context, "Could not determine the most recent location.", Toast.LENGTH_SHORT).show()
+                        }
+
                     } else {
                         Toast.makeText(context, "${device.devicename} has no location history.", Toast.LENGTH_SHORT).show()
                     }
@@ -112,6 +121,31 @@ class FindMyDeviceFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+
+//    private fun fetchDeviceLocationFromServer(device: Device) {
+//        Toast.makeText(context, "Fetching location history for ${device.devicename}...", Toast.LENGTH_SHORT).show()
+//        lifecycleScope.launch {
+//            try {
+//                val response = RetrofitClient.instance.getDeviceLocationHistory(device.deviceid)
+//                if (response.isSuccessful && response.body()?.success == true) {
+//                    val locationHistory = response.body()?.data
+//                    if (!locationHistory.isNullOrEmpty()) {
+//                        updateMapWithSinglePoint(locationHistory[0], device)
+////                        updateMapWithHistory(locationHistory, device)
+//                    } else {
+//                        Toast.makeText(context, "${device.devicename} has no location history.", Toast.LENGTH_SHORT).show()
+//                    }
+//                } else {
+//                    val errorMsg = response.body()?.message ?: "Could not find device history."
+//                    Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
+//                }
+//            } catch (e: Exception) {
+//                Log.e(TAG, "API call failed with exception", e)
+//                Toast.makeText(context, "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
+//            }
+//        }
+//    }
 
     private fun updateMapWithSinglePoint(point: TrackPoint, device: Device) {
         val lat = point.latitude.toDoubleOrNull()
