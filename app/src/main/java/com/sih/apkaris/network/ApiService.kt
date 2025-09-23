@@ -24,22 +24,56 @@ data class DeviceHistoryResponse(
     val message: String?
 )
 
-data class RegisterRequest(val username: String, val contact: String?, val address: String?, val password: String)
-data class LoginRequest(val username: String, val password: String)
+data class RegisterRequest(
+    val username: String,
+    val contact: String?,
+    val address: String?,
+    val password: String
+)
+
+data class LoginRequest(
+    val username: String,
+    val password: String
+)
+
+// Added `nearby` parameter to support broadcasting nearby scanned devices
 data class LocationUpdateRequest(
     val deviceId: String,
     val latitude: Double?,
     val longitude: Double?,
-    val timestamp: String
+    val timestamp: String,
+    val nearby: List<NearbyDevice>? = null
 )
 
-data class LoginResponse(val success: Boolean, val token: String?, val user: User?, val message: String?)
+data class LoginResponse(
+    val success: Boolean,
+    val token: String?,
+    val user: User?,
+    val message: String?
+)
+
 data class User(val devices: List<Device>)
-data class Device(val deviceid: String, val devicename: String, val lat: Double?, val lon: Double?)
-data class GenericResponse(val success: Boolean, val message: String)
+
+data class Device(
+    val deviceid: String,
+    val devicename: String,
+    val lat: Double?,
+    val lon: Double?
+)
+
+data class GenericResponse(
+    val success: Boolean,
+    val message: String
+)
+
+// Model for nearby scanned devices
+data class NearbyDevice(
+    val id: String,
+    val rssi: Int
+)
+
 
 // --- API Interface ---
-
 interface ApiService {
     @POST("register")
     suspend fun registerUser(@Body request: RegisterRequest): Response<GenericResponse>

@@ -16,8 +16,10 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.sih.apkaris.R
+import com.sih.apkaris.bluetooth.BluetoothScanner
 import com.sih.apkaris.bluetooth.ScannedDevice
 import com.sih.apkaris.network.LocationUpdateRequest
+import com.sih.apkaris.network.NearbyDevice
 import com.sih.apkaris.network.RetrofitClient
 import com.sih.apkaris.utils.Logger
 import kotlinx.coroutines.*
@@ -37,13 +39,17 @@ class LocationService : Service() {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private lateinit var fused: FusedLocationProviderClient
     private var lastLocation: Location? = null
+
+    private lateinit var scanner: BluetoothScanner
     private val sendIntervalMs = 5000L
 
     override fun onCreate() {
         super.onCreate()
         fused = LocationServices.getFusedLocationProviderClient(this)
+        scanner = BluetoothScanner(this)
         createChannelAndForeground()
         startLocationUpdates()
+        scanner.startScanning()
         startSendLoop()
     }
 
@@ -51,27 +57,37 @@ class LocationService : Service() {
         scope.launch {
             while (isActive) {
                 try {
+                    // 1. Get a snapshot of ALL nearby devices
+                    val allNearbyDevices = scanner.snapshotNearby()
+
+                    // 2. Filter devices to only include ones with required name prefix
+                    val filteredDevices = allNearbyDevices.filter { device ->
+                        device.name?.startsWith("SIH_TEAM_SAPPHIRE") == true
+                    }
+
+                    // 3. Send the filtered list to the UI
+                    broadcastDevices(ArrayList(filteredDevices))
+
+                    // 4. Map filtered list into NearbyDevice objects
+                    val nearbyPayload = filteredDevices.map { device ->
+                        NearbyDevice(id = device.address, rssi = device.rssi)
+                    }
+
                     val loc = lastLocation
                     val request = LocationUpdateRequest(
                         deviceId = getDeviceUniqueId(),
                         latitude = loc?.latitude,
                         longitude = loc?.longitude,
-                        timestamp = getTimestampISO8601()
+                        timestamp = getTimestampISO8601(),
+                        nearby = nearbyPayload
                     )
 
                     val response = RetrofitClient.instance.updateLocation(request)
                     if (response.isSuccessful) {
-                        Logger.d("Location updated successfully")
+                        Logger.d("Location and ${nearbyPayload.size} nearby devices updated successfully")
                     } else {
                         Logger.e("Location update failed: ${response.errorBody()?.string()}")
                     }
-
-                    // Example: If you also want to notify nearby devices,
-                    // broadcast to the fragment (for RecyclerView updates)
-                    // Here you would replace with real scanned devices from BeaconService or BLE logic
-                    val dummyList = arrayListOf<ScannedDevice>()
-                    broadcastDevices(dummyList)
-
                 } catch (e: Exception) {
                     Logger.e("Location update exception", e)
                 }
@@ -136,6 +152,7 @@ class LocationService : Service() {
 
     override fun onDestroy() {
         scope.cancel()
+        scanner.stopScanning()
         super.onDestroy()
     }
 

@@ -97,7 +97,8 @@ class FindMyDeviceFragment : Fragment(), OnMapReadyCallback {
                 if (response.isSuccessful && response.body()?.success == true) {
                     val locationHistory = response.body()?.data
                     if (!locationHistory.isNullOrEmpty()) {
-                        updateMapWithHistory(locationHistory, device)
+                        updateMapWithSinglePoint(locationHistory[0], device)
+//                        updateMapWithHistory(locationHistory, device)
                     } else {
                         Toast.makeText(context, "${device.devicename} has no location history.", Toast.LENGTH_SHORT).show()
                     }
@@ -112,38 +113,57 @@ class FindMyDeviceFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun updateMapWithHistory(history: List<TrackPoint>, device: Device) {
-        googleMap.clear()
-        val boundsBuilder = LatLngBounds.Builder()
+    private fun updateMapWithSinglePoint(point: TrackPoint, device: Device) {
+        val lat = point.latitude.toDoubleOrNull()
+        val lng = point.longitude.toDoubleOrNull()
 
-        history.forEach { point ->
-            val lat = point.latitude.toDoubleOrNull()
-            val lng = point.longitude.toDoubleOrNull()
-            if (lat != null && lng != null) {
-                val location = LatLng(lat, lng)
-                googleMap.addMarker(
-                    MarkerOptions()
-                        .position(location)
-                        .title(device.devicename)
-                        .snippet("Seen at: ${point.timestamp}")
-                )
-                boundsBuilder.include(location)
-            }
-        }
-
-        try {
-            val bounds = boundsBuilder.build()
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
-        } catch (e: IllegalStateException) {
-            history.lastOrNull()?.let { lastPoint ->
-                val lat = lastPoint.latitude.toDoubleOrNull()
-                val lng = lastPoint.longitude.toDoubleOrNull()
-                if (lat != null && lng != null) {
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), 15f))
-                }
-            }
+        if (lat != null && lng != null) {
+            val location = LatLng(lat, lng)
+            googleMap.clear()
+            googleMap.addMarker(
+                MarkerOptions()
+                    .position(location)
+                    .title(device.devicename)
+                    .snippet("Last seen: ${point.timestamp}")
+            )
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+        } else {
+            Toast.makeText(context, "Location data is invalid.", Toast.LENGTH_SHORT).show()
         }
     }
+
+//    private fun updateMapWithHistory(history: List<TrackPoint>, device: Device) {
+//        googleMap.clear()
+//        val boundsBuilder = LatLngBounds.Builder()
+//
+//        history.forEach { point ->
+//            val lat = point.latitude.toDoubleOrNull()
+//            val lng = point.longitude.toDoubleOrNull()
+//            if (lat != null && lng != null) {
+//                val location = LatLng(lat, lng)
+//                googleMap.addMarker(
+//                    MarkerOptions()
+//                        .position(location)
+//                        .title(device.devicename)
+//                        .snippet("Seen at: ${point.timestamp}")
+//                )
+//                boundsBuilder.include(location)
+//            }
+//        }
+//
+//        try {
+//            val bounds = boundsBuilder.build()
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+//        } catch (e: IllegalStateException) {
+//            history.lastOrNull()?.let { lastPoint ->
+//                val lat = lastPoint.latitude.toDoubleOrNull()
+//                val lng = lastPoint.longitude.toDoubleOrNull()
+//                if (lat != null && lng != null) {
+//                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), 15f))
+//                }
+//            }
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
