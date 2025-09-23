@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.sih.apkaris.MainActivity
 import com.sih.apkaris.databinding.FragmentReportLostBinding
-import com.sih.apkaris.network.ReportLostRequest
 import com.sih.apkaris.network.RetrofitClient
 import kotlinx.coroutines.launch
 
@@ -44,11 +43,7 @@ class ReportLostFragment : Fragment() {
     private fun reportDeviceAsLost(deviceId: String) {
         lifecycleScope.launch {
             try {
-                // You need a way to get the current user's ID, e.g., from SharedPreferences
-                val userId = "user_id_from_prefs"
-                val request = ReportLostRequest(deviceId = deviceId, userId = userId)
-                val response = RetrofitClient.instance.reportLostDevice(request)
-
+                val response = RetrofitClient.instance.reportLostDevice(deviceId)
                 if (response.isSuccessful && response.body()?.success == true) {
                     Toast.makeText(requireContext(), "Device $deviceId has been marked as lost.", Toast.LENGTH_LONG).show()
                     (activity as? MainActivity)?.showHomeUI()

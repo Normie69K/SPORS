@@ -11,12 +11,12 @@ import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.sih.apkaris.R
+import com.sih.apkaris.bluetooth.ScannedDevice
 import com.sih.apkaris.network.LocationUpdateRequest
 import com.sih.apkaris.network.RetrofitClient
 import com.sih.apkaris.utils.Logger
@@ -27,8 +27,11 @@ import java.util.*
 class LocationService : Service() {
 
     companion object {
-        const val CHANNEL_ID = "BleLocationChannel_v1"
-        val jsonLog = MutableLiveData<String>()
+        const val ACTION_DEVICES_UPDATE = "com.sih.apkaris.services.ACTION_DEVICES_UPDATE"
+        const val EXTRA_DEVICES = "com.sih.apkaris.services.EXTRA_DEVICES"
+
+        const val CHANNEL_ID = "LocationServiceChannel"
+        private const val NOTIFICATION_ID = 1001
     }
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -42,33 +45,6 @@ class LocationService : Service() {
         createChannelAndForeground()
         startLocationUpdates()
         startSendLoop()
-    }
-
-    private fun createChannelAndForeground() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val nm = getSystemService(NotificationManager::class.java)
-            val channel = NotificationChannel(CHANNEL_ID, "BLE / Location", NotificationManager.IMPORTANCE_LOW)
-            nm.createNotificationChannel(channel)
-        }
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("SPORS — Tracking Active")
-            .setContentText("Broadcasting location for device safety.")
-            .setSmallIcon(R.drawable.ic_ble_active)
-            .setOngoing(true)
-            .build()
-        startForeground(1001, notification)
-    }
-
-    private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-        val req = LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 3000L).build()
-        fused.requestLocationUpdates(req, object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                lastLocation = result.lastLocation
-            }
-        }, null)
     }
 
     private fun startSendLoop() {
@@ -89,12 +65,55 @@ class LocationService : Service() {
                     } else {
                         Logger.e("Location update failed: ${response.errorBody()?.string()}")
                     }
+
+                    // Example: If you also want to notify nearby devices,
+                    // broadcast to the fragment (for RecyclerView updates)
+                    // Here you would replace with real scanned devices from BeaconService or BLE logic
+                    val dummyList = arrayListOf<ScannedDevice>()
+                    broadcastDevices(dummyList)
+
                 } catch (e: Exception) {
                     Logger.e("Location update exception", e)
                 }
                 delay(sendIntervalMs)
             }
         }
+    }
+
+    private fun createChannelAndForeground() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nm = getSystemService(NotificationManager::class.java)
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Location Service",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            nm.createNotificationChannel(channel)
+        }
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("SPORS")
+            .setContentText("Location service is active for device safety.")
+            .setSmallIcon(R.drawable.ic_location) // ensure ic_location exists in res/drawable
+            .setOngoing(true)
+            .build()
+        startForeground(NOTIFICATION_ID, notification)
+    }
+
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val req = LocationRequest.Builder(
+            Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+            3000L
+        ).build()
+        fused.requestLocationUpdates(req, object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                lastLocation = result.lastLocation
+            }
+        }, null)
     }
 
     private fun getTimestampISO8601(): String {
@@ -105,7 +124,14 @@ class LocationService : Service() {
 
     @SuppressLint("HardwareIds")
     private fun getDeviceUniqueId(): String {
-        return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID) ?: UUID.randomUUID().toString()
+        return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            ?: UUID.randomUUID().toString()
+    }
+
+    private fun broadcastDevices(devices: ArrayList<ScannedDevice>) {
+        val intent = Intent(ACTION_DEVICES_UPDATE)
+        intent.putParcelableArrayListExtra(EXTRA_DEVICES, devices)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     override fun onDestroy() {

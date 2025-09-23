@@ -6,18 +6,20 @@ import android.bluetooth.le.ScanResult
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresPermission
+import android.os.Parcelable
 import com.sih.apkaris.utils.Logger
+import kotlinx.parcelize.Parcelize
 import java.util.concurrent.ConcurrentHashMap
+
+@Parcelize
+data class ScannedDevice(val address: String, val name: String?, val rssi: Int) : Parcelable
 
 class BluetoothScanner(private val ctx: Context) {
 
     private var scanner: BluetoothLeScanner? = null
     private var callback: ScanCallback? = null
 
-    // Map of address -> rssi (keeps most recent rssi)
-    private val devices = ConcurrentHashMap<String, Int>()
+    private val devices = ConcurrentHashMap<String, ScannedDevice>()
 
     @SuppressLint("MissingPermission")
     fun startScanning() {
@@ -35,17 +37,9 @@ class BluetoothScanner(private val ctx: Context) {
 
             callback = object : ScanCallback() {
                 override fun onScanResult(callbackType: Int, result: ScanResult) {
-                    val d = result.device ?: return
-                    val address = d.address ?: return
-                    devices[address] = result.rssi
-                }
-
-                override fun onBatchScanResults(results: MutableList<ScanResult>?) {
-                    results?.forEach { r ->
-                        val d = r.device ?: return@forEach
-                        val address = d.address ?: return@forEach
-                        devices[address] = r.rssi
-                    }
+                    val device = result.device ?: return
+                    val address = device.address ?: return
+                    devices[address] = ScannedDevice(address, device.name, result.rssi)
                 }
 
                 override fun onScanFailed(errorCode: Int) {
@@ -57,11 +51,7 @@ class BluetoothScanner(private val ctx: Context) {
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                 .build()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                scanner?.startScan(null, settings, callback)
-            } else {
-                scanner?.startScan(callback)
-            }
+            scanner?.startScan(null, settings, callback)
             Logger.d("BLE scan started")
         } catch (t: Throwable) {
             Logger.e("startScanning error", t)
@@ -71,9 +61,7 @@ class BluetoothScanner(private val ctx: Context) {
     @SuppressLint("MissingPermission")
     fun stopScanning() {
         try {
-            scanner?.let { s ->
-                callback?.let { s.stopScan(it) }
-            }
+            scanner?.stopScan(callback)
             callback = null
             scanner = null
             devices.clear()
@@ -83,12 +71,7 @@ class BluetoothScanner(private val ctx: Context) {
         }
     }
 
-    // snapshot of current nearby devices (and clear older ones if you want)
-    fun snapshotNearby(): List<Pair<String, Int>> {
-        return devices.entries.map { it.key to it.value }
-    }
-
-    fun clearSnapshot() {
-        devices.clear()
+    fun snapshotNearby(): List<ScannedDevice> {
+        return devices.values.toList()
     }
 }
