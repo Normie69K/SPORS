@@ -5,90 +5,189 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
-    tools:context=".fragments.HomeFragment"
+    android:background="?attr/android:windowBackground"
+    tools:context=".fragements.HomeFragment"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Settings button (top right) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/primary_brand"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_view_how_it_works_description">
+
+            <LinearLayout
+                android:id="@+id/layout_features"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintEnd_toStartOf="@+id/layout_support"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.6">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Features"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="End-to-end encryption"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Anonymous tracking"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Community network"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_support"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:gravity="start"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/layout_features"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.6">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Support"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Need help? Contact our support team."
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_copyright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/poppins"
+                android:text="© 2025 SPORS. All rights reserved."
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageButton
-            android:id="@+id/button_settings"
+            android:id="@+id/button_theme_switcher"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Switch Theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/android:textColorPrimary"
+            tools:src="@drawable/ic_sun" />
+
+        <ImageButton
+            android:id="@+id/ivProfileIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Settings"
+            android:contentDescription="Profile"
             android:src="@drawable/profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/colorPrimary" />
 
-        <!-- Theme switcher button (top left) -->
-        <ImageButton
-            android:id="@+id/button_theme_switcher"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Switch Theme"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white"
-            tools:src="@drawable/ic_moon" />
 
-        <!-- Welcome text -->
+
         <TextView
             android:id="@+id/text_view_welcome"
+            style="@style/MySectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:fontFamily="@font/poppins_bold"
             android:text="WELCOME TO"
-            android:textColor="@color/white"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- SPORS Logo -->
         <TextView
             android:id="@+id/text_view_spors_logo"
+            style="@style/MyScreenTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
             android:text="SPORS"
-            android:textColor="@color/white"
             android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_welcome" />
 
-        <!-- Tagline -->
+
+
         <TextView
             android:id="@+id/text_view_tagline"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
+            android:gravity="center"
             android:text="Find lost items securely with a community-powered network."
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_spors_logo" />
 
-        <!-- Buttons -->
         <Button
             android:id="@+id/button_report_lost"
             style="@style/MyPrimaryButton"
             android:layout_marginTop="48dp"
             android:text="Report Lost Device"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_tagline" />
@@ -97,6 +196,7 @@
             android:id="@+id/button_find_my_device"
             style="@style/MyPrimaryButton"
             android:layout_marginTop="16dp"
+            android:textColor="#FFFFFF"
             android:text="Find My Device"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,6 +205,7 @@
         <Button
             android:id="@+id/button_help_find"
             style="@style/MyPrimaryButton"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="16dp"
             android:text="Help Find Devices"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,13 +215,13 @@
         <Button
             android:id="@+id/button_report_found"
             style="@style/MyPrimaryButton"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="16dp"
             android:text="Report Found Devices"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_help_find" />
 
-        <!-- Protect section -->
         <TextView
             android:id="@+id/text_view_protect_title"
             style="@style/MySectionTitle"
@@ -132,18 +233,18 @@
 
         <TextView
             android:id="@+id/text_view_protect_description"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
-            android:text="Join thousands of users who trust FindMyNet to keep their devices safe."
+            android:gravity="center"
+            android:text="Join thousands of users who trust SPORS to keep their devices safe."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_protect_title" />
 
-        <!-- How it works section -->
         <TextView
             android:id="@+id/text_view_how_it_works_title"
             style="@style/MySectionTitle"
@@ -155,131 +256,17 @@
 
         <TextView
             android:id="@+id/text_view_how_it_works_description"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
+            android:gravity="center"
             android:text="Our network uses advanced technology to help you find your devices while maintaining complete privacy."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_view_how_it_works_title" />
-
-        <!-- Footer -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="48dp"
-            android:background="@color/primary_blue_button"
-            app:layout_constraintTop_toBottomOf="@id/text_view_how_it_works_description">
-
-            <LinearLayout
-                android:id="@+id/layout_features"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="start"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layout_support"
-                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintVertical_bias="0.6">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Features"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="End-to-end encryption"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="Anonymous tracking"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="Community network"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_support"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="start"
-                android:layout_marginStart="48dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/layout_features"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/text_view_copyright"
-                app:layout_constraintVertical_bias="0.6">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Support"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="Need help? Contact our"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="support team for assistance"
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="with your devices."
-                    android:textColor="@color/white"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_view_copyright"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/poppins"
-                android:text="© 2024 FindMyNet. All rights reserved. Privacy-first device tracking."
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

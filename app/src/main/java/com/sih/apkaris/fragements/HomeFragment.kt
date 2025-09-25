@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
 //        }
 
 
-        binding.buttonSettings.setOnClickListener {
+        binding.ivProfileIcon.setOnClickListener {
             mainActivity?.showProfileFragment()
         }
         binding.buttonReportLost.setOnClickListener {
@@ -64,17 +64,45 @@ class HomeFragment : Fragment() {
     }
 
     private fun toggleTheme() {
-        // Check what the current night mode is
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val decorView = requireActivity().window.decorView as ViewGroup
 
-        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
-            // If it's currently night, switch to day mode
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            // If it's currently day, switch to night mode
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        // Create overlay
+        val overlay = View(requireContext()).apply {
+            setBackgroundColor(android.graphics.Color.BLACK) // Or use theme background color
+            alpha = 0f
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         }
+        decorView.addView(overlay)
+
+        // Fade in
+        overlay.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .withEndAction {
+                // Switch theme while overlay is fully visible
+                val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+
+                // Fade out after theme switch
+                overlay.animate()
+                    .alpha(0f)
+                    .setDuration(300)
+                    .withEndAction {
+                        decorView.removeView(overlay)
+                    }
+                    .start()
+            }
+            .start()
     }
+
+
 
     private fun updateThemeIcon() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

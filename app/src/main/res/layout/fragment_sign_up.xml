@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     tools:context=".fragements.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,12 +16,10 @@
 
         <TextView
             android:id="@+id/text_view_signup_title"
+            style="@style/MyScreenTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
-            android:fontFamily="@font/poppins_bold"
             android:text="SIGN UP"
-            android:textColor="@color/white"
             android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -115,14 +113,11 @@
             <TextView
                 android:id="@+id/text_view_already_account"
                 style="@style/MyBodyText.Medium"
-                android:text="Already Have an Account? "
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:text="Already Have an Account? " />
             <TextView
                 android:id="@+id/text_view_login_link"
                 style="@style/MyTextLink"
-                android:text="Log In"
-                android:textSize="14sp" />
+                android:text="Log In" />
         </LinearLayout>
 
         <ProgressBar

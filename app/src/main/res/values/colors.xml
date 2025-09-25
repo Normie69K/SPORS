@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_blue_app_background">#0A192F</color>
-    <color name="primary_blue_button">#2437A1</color>
-    <color name="light_blue_text_link">#3366CC</color>
-    <color name="privacy_box_blue">#4A64A1</color>
+    <!-- Backgrounds -->
+    <color name="app_background">#7298d0</color> <!-- soft blue background -->
+    <color name="surface">#2437a1</color> <!-- cards, buttons -->
 
-    <color name="white">#FFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="primary_brand">#2D6EF5</color> <!-- deep blue buttons -->
+    <color name="primary_accent">#4DA3FF</color> <!-- lighter blue for variants -->
+
+    <!-- Text -->
+    <color name="text_primary">#4B5563</color> <!-- almost black -->
+    <color name="text_secondary">#FFFFFF</color> <!-- muted gray -->
+
+    <!-- Utility -->
     <color name="black">#000000</color>
-    <color name="dark_grey_text">#AAAAAA</color>
-
-    <color name="input_field_background">#1A2A47</color>
-    <color name="input_field_border">#334766</color>
-    <color name="google_blue">#4285F4</color>
 </resources>

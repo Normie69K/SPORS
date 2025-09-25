@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     android:fillViewport="true"
-    tools:context=".fragments.ReportLostFragment">
+    tools:context=".fragements.ReportLostFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,11 +21,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Go back"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/android:textColorPrimary" />
 
         <ImageView
             android:id="@+id/image_view_warning_icon"
@@ -36,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/android:textColorPrimary" />
 
         <TextView
             android:id="@+id/text_view_title"
@@ -49,12 +48,13 @@
 
         <TextView
             android:id="@+id/text_view_description"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
+            android:gravity="center"
             android:text="Enter the unique ID of your device to mark it as lost. This will activate location tracking via the network."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_device_id"
-            style="@style/MyTextInputLayout"
+            style="@style/MyTextInputLayoutLight"
             android:layout_marginTop="16dp"
             android:hint="Enter Your Device ID"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,21 +81,18 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_text_device_id"
                 style="@style/MyTextInputEditText"
-                android:textColorHint="@color/white"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/white"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button_mark_as_lost"
             style="@style/MyPrimaryButton"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="24dp"
             android:text="Mark As Lost"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout_device_id" />
-
 
         <TextView
             android:id="@+id/text_view_what_happens_title"
@@ -108,13 +105,15 @@
 
         <TextView
             android:id="@+id/text_view_what_happens_description"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
+
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
-            android:text="Your device will be added to our network's watchlist. When other FindMyNet users come within range, they'll anonymously report its location to help you find it."
+            android:gravity="center"
+            android:text="Your device will be added to our network's watchlist. When other SPORS users come within range, they'll anonymously report its location to help you find it."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_what_happens_title" />

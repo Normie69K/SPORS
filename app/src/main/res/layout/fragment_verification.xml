@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
-    tools:context=".fragments.VerificationFragment">
+    android:background="?attr/android:windowBackground"
+    tools:context=".fragements.VerificationFragment">
 
     <ImageButton
         android:id="@+id/button_back"
@@ -15,21 +15,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Go back"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+        app:tint="?attr/android:textColorPrimary" />
 
     <TextView
         android:id="@+id/text_view_verification_title"
+        style="@style/MyScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:fontFamily="@font/poppins_bold"
         android:text="Verification"
-        android:textColor="@color/white"
-        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,8 +40,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="40dp"
         android:gravity="center"
-        android:text="We've sent a code to sporrs@gmail.com"
-        android:textColor="@color/dark_grey_text"
+        android:text="We've sent a code to your email."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_verification_title" />
@@ -63,22 +59,18 @@
         <EditText
             android:id="@+id/otp_box_1"
             style="@style/MyOtpBox" />
-
         <EditText
             android:id="@+id/otp_box_2"
             style="@style/MyOtpBox"
             android:layout_marginStart="12dp"/>
-
         <EditText
             android:id="@+id/otp_box_3"
             style="@style/MyOtpBox"
             android:layout_marginStart="12dp"/>
-
         <EditText
             android:id="@+id/otp_box_4"
             style="@style/MyOtpBox"
             android:layout_marginStart="12dp"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -91,19 +83,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_otp_boxes">
-
         <TextView
             android:id="@+id/text_view_no_code"
             style="@style/MyBodyText.Medium"
-            android:text="Didn't get the code? "
-            android:textColor="@color/white" />
-
+            android:text="Didn't get the code? " />
         <TextView
             android:id="@+id/text_view_resend_link"
             style="@style/MyTextLink"
             android:text="Resend" />
     </LinearLayout>
-
 
     <Button
         android:id="@+id/button_verify"
@@ -124,5 +112,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

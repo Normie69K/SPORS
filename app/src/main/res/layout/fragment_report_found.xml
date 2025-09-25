@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     tools:context=".fragements.ReportFoundFragment">
 
     <ImageButton
@@ -16,7 +16,7 @@
         android:layout_marginTop="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_arrow_back"
-        app:tint="@color/white"
+        app:tint="?attr/android:textColorPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +26,7 @@
         android:layout_height="64dp"
         android:layout_marginTop="80dp"
         android:src="@drawable/ic_search"
-        app:tint="@color/white"
+        app:tint="?attr/android:textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,12 +42,13 @@
 
     <TextView
         android:id="@+id/text_view_description"
-        style="@style/MyBodyText.White.Center"
+        style="@style/MyBodyText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="48dp"
+        android:gravity="center"
         android:text="Found a lost device? Enter its ID to connect anonymously with the owner and help them get it back."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +58,8 @@
         android:id="@+id/button_report_found"
         style="@style/MyPrimaryButton"
         android:layout_marginTop="32dp"
-        android:text="Report Found Devices"
+        android:textColor="#FFFFFF"
+        android:text="Report Found Device"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_description" />
@@ -66,6 +68,7 @@
         android:id="@+id/button_past_chats"
         style="@style/MyPrimaryButton"
         android:layout_marginTop="16dp"
+        android:textColor="#FFFFFF"
         android:text="Past Chats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

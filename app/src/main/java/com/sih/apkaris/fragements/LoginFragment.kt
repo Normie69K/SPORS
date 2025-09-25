@@ -1,12 +1,14 @@
 package com.sih.apkaris.fragements
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
@@ -14,6 +16,7 @@ import com.sih.apkaris.MainActivity
 import com.sih.apkaris.databinding.FragmentLoginBinding
 import com.sih.apkaris.network.LoginRequest
 import com.sih.apkaris.network.RetrofitClient
+import com.sih.apkaris.services.BeaconService
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -64,6 +67,10 @@ class LoginFragment : Fragment() {
                         putString("devices", Gson().toJson(loginData.user?.devices))
                         apply()
                     }
+
+                    // START THE SERVICE AUTOMATICALLY
+                    startBeaconService()
+
                     Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
                     (activity as? MainActivity)?.showHomeUI()
                 } else {
@@ -75,6 +82,12 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun startBeaconService() {
+        val serviceIntent = Intent(requireContext(), BeaconService::class.java)
+        ContextCompat.startForegroundService(requireContext(), serviceIntent)
+        Log.d("LoginFragment", "Beacon service started automatically after login.")
     }
 
     override fun onDestroyView() {

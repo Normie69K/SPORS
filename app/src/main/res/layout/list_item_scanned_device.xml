@@ -5,22 +5,20 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <TextView
-        android:id="@+id/tv_device_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="Device Name"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_device_name"
+            style="@style/MyBodyText.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Device Name" />
 
-    <TextView
-        android:id="@+id/tv_device_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Address: 00:11:22:33, RSSI: -50"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/tv_device_details"
+            style="@style/MyBodyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address: 00:11:22:33, RSSI: -50"
+            android:textSize="12sp" />
 
 </LinearLayout>

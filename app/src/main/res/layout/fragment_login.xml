@@ -5,17 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
-    tools:context=".fragments.LoginFragment">
+    android:background="?attr/android:windowBackground"
+    tools:context=".fragements.LoginFragment">
 
     <TextView
         android:id="@+id/text_view_login_title"
+        style="@style/MyScreenTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:fontFamily="@font/poppins_bold"
         android:text="LOGIN"
-        android:textColor="@color/white"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,8 +48,6 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_password"
             style="@style/MyTextInputEditText"
-            android:textColorHint="@color/white"
-            android:textColor="@color/white"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -95,16 +92,12 @@
         <TextView
             android:id="@+id/text_view_no_account"
             style="@style/MyBodyText.Medium"
-            android:text="Don't Have an Account? "
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:text="Don't Have an Account? " />
 
         <TextView
             android:id="@+id/text_view_signup_link"
             style="@style/MyTextLink"
-            android:text="Sign Up"
-            android:textSize="14sp" />
-
+            android:text="Sign Up" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

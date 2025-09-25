@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     tools:context=".GetStartedActivity">
 
     <ImageView
@@ -21,14 +21,10 @@
 
     <TextView
         android:id="@+id/text_view_welcome"
+        style="@style/MyScreenTitle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="@font/poppins_bold"
         android:gravity="center"
         android:text="Welcome to SPORS"
-        android:textColor="@color/white"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/text_view_tagline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,12 +32,13 @@
 
     <TextView
         android:id="@+id/text_view_tagline"
-        style="@style/MyBodyText.White.Center"
+        style="@style/MyBodyText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
+        android:gravity="center"
         android:text="Find lost items securely with a community-powered network."
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/button_get_started"

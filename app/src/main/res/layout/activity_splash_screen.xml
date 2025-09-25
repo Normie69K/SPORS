@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     tools:context=".Splash_Screen">
 
     <TextView
         android:id="@+id/app_logo"
+        style="@style/MyScreenTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
         android:text="SPORS"
-        android:textColor="@color/white"
         android:textSize="60sp"
         app:layout_constraintBottom_toTopOf="@+id/app_description"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,12 +21,13 @@
 
     <TextView
         android:id="@+id/app_description"
-        style="@style/MyBodyText.White.Center"
+        style="@style/MyBodyText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="48dp"
+        android:gravity="center"
         android:text="@string/app"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

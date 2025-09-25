@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue_app_background"
+    android:background="?attr/android:windowBackground"
     android:fillViewport="true"
     tools:context=".fragements.FindMyDeviceFragment">
 
@@ -24,7 +24,7 @@
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/android:textColorPrimary" />
 
         <ImageView
             android:id="@+id/image_view_location_icon"
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="?attr/android:textColorPrimary" />
 
         <TextView
             android:id="@+id/text_view_title"
@@ -48,12 +48,13 @@
 
         <TextView
             android:id="@+id/text_view_description"
-            style="@style/MyBodyText.White.Center"
+            style="@style/MyBodyText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="48dp"
+            android:gravity="center"
             android:text="Select your device to see its last known location on the map."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +77,6 @@
             android:layout_width="315dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textColorHint="@color/dark_grey_text"
             android:hint="Select Your Device"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,10 +86,8 @@
                 android:id="@+id/autocomplete_text_view_device"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textColorHint="@color/dark_grey_text"
                 android:inputType="none"
-                android:textColor="@color/white"/>
+                android:textColor="?attr/android:textColorPrimary"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
