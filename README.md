@@ -1,181 +1,146 @@
-````markdown
-# APkARiS  
+# SPORS: Secure Phone Ownership and Recovery System
 
-APkARiS is an Android application designed for analyzing APK files and retrieving essential device information in a lightweight, user-friendly way.  
-It combines **APK metadata analysis**, **permission inspection**, and **device info display** into a single app with a clean, gradient-based interface.  
-The application is structured with only **5 activities**, keeping it simple, fast, and efficient.  
+SPORS is a comprehensive Android application designed to be a modern-day solution for locating lost devices. It transforms your smartphone into a powerful tool for finding not only your own misplaced items but also for contributing to a community-based network to help others recover their lost devices. The application leverages a robust set of technologies, including real-time location tracking, Bluetooth proximity scanning, and a secure, anonymous communication platform, to create a reliable and user-friendly experience.
 
----
+## Table of Contents
 
-## 🚀 Features & Functionality  
+  - [Key Features](https://www.google.com/search?q=%23key-features)
+  - [How It Works](https://www.google.com/search?q=%23how-it-works)
+  - [Architecture](https://www.google.com/search?q=%23architecture)
+  - [Technology Stack](https://www.google.com/search?q=%23technology-stack)
+  - [Permissions Explained](https://www.google.com/search?q=%23permissions-explained)
+  - [Getting Started](https://www.google.com/search?q=%23getting-started)
+  - [Project Structure](https://www.google.com/search?q=%23project-structure)
+  - [Contributing](https://www.google.com/search?q=%23contributing)
+  - [License](https://www.google.com/search?q=%23license)
 
-### 1. Splash Screen  
-- Displays app logo, name, and description with animations.  
-- Gradient background for modern UI experience.  
-- Auto-redirects to main dashboard after a short delay.  
+-----
 
-### 2. Main Dashboard  
-- Serves as the home screen of the app.  
-- Provides navigation to the two core functions:  
-  - **APK Analysis**  
-  - **Device Information**  
-- Includes quick access to Settings/About page.  
+## Key Features
 
-### 3. APK Analysis  
-- Allows users to select APK files from device storage.  
-- Extracts and displays:  
-  - App name  
-  - Package name  
-  - Version name & version code  
-  - File size  
-- Lists all declared permissions.  
-- Categorizes permissions as **Normal**, **Dangerous**, or **Special** for quick security insights.  
-- Provides a summary view so users can quickly judge APK safety.  
+  - **Real-Time Location Tracking**: The app uses both fine and coarse location data, with support for background location updates, to provide the last known location of your device on an integrated Google Map.
+  - **Bluetooth Proximity Detection**: By utilizing Bluetooth Low Energy (BLE), the app can scan for nearby devices and beacons, helping you pinpoint the location of a lost item when you are in close proximity.
+  - **Community-Powered Search**: The "Help Find" feature allows users to participate in the search for other users' lost devices. When a user's device comes within range of a lost item, its location is anonymously updated, increasing the chances of recovery.
+  - **Lost and Found Reporting**: Users can easily report their devices as lost or report a device they have found. This initiates the tracking process and notifies the community.
+  - **Secure Anonymous Chat**: An in-app anonymous chat feature allows the finder of a lost device to communicate securely with the owner without revealing any personal information, ensuring privacy and safety for both parties.
+  - **Persistent Background Services**: The app runs as a foreground service, ensuring that location and Bluetooth scanning continue to operate reliably even when the app is not in the foreground. It also includes a `BootReceiver` to automatically restart services when the device is powered on.
+  - **User Authentication and Profile Management**: Secure user authentication is provided through email and password, with options for password recovery. Users can also manage their profile information within the app.
 
-### 4. Device Information  
-- Fetches device-specific information such as:  
-  - Device model & manufacturer  
-  - Android version & SDK level  
-  - Hardware details (CPU, RAM info where available)  
-  - IMEI / Serial number (restricted on newer Android versions due to permissions).  
-- Helps in device-level debugging and verification.  
+-----
 
-### 5. Settings / About  
-- Displays app version and developer details.  
-- Provides link to project repository.  
-- May include theme toggles or simple preferences.  
+## How It Works
 
----
+1.  **Sign Up and Set Up**: Users create an account and grant the necessary permissions for location and Bluetooth access.
+2.  **Background Tracking**: The app's `LocationService` and `BeaconService` run in the background, periodically updating the device's location and scanning for other devices in the network.
+3.  **Report a Lost Device**: When a device is lost, the user can mark it as "lost" from their account. The app will then display its last known location on a map.
+4.  **Community Assistance**: Other users running the app will anonymously detect the lost device if they come near it, and the location will be updated for the owner.
+5.  **Report a Found Device**: If a user finds a lost device, they can report it as "found" and initiate an anonymous chat with the owner to coordinate its return.
 
-## 📸 Screenshots  
+-----
 
-### Splash Screen  
-*(Placeholder – add screenshot here)*  
+## Architecture
 
-### Main Dashboard  
-*(Placeholder – add screenshot here)*  
+This application follows a modern Android architecture, loosely based on the **Model-View-ViewModel (MVVM)** pattern.
 
-### APK Analysis Screen  
-*(Placeholder – add screenshot here)*  
+  - **View**: The UI is built using Activities and Fragments, which are responsible for displaying data and capturing user input.
+  - **ViewModel**: The use of `lifecycle-viewmodel-ktx` suggests that ViewModels are used to hold and manage UI-related data, surviving configuration changes.
+  - **Model**: The model layer consists of data classes (like `ChatModels`), a network layer for API communication (`ApiService` with Retrofit), and services for background tasks.
+  - **Services**: `LocationService` and `BeaconService` handle the heavy lifting of background tracking, independent of the UI.
+  - **Repository**: Although not explicitly defined, a repository pattern is likely used to abstract the data sources (network and local database) from the ViewModels.
 
-### Device Information Screen  
-*(Placeholder – add screenshot here)*  
+-----
 
-### Settings/About Screen  
-*(Placeholder – add screenshot here)*  
+## Technology Stack
 
----
+  - **Language**: [Kotlin](https://kotlinlang.org/)
+  - **Asynchronous Programming**: [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+  - **Architecture Components**:
+      - [AndroidX](https://developer.android.com/jetpack/androidx)
+      - [Lifecycle (ViewModel & LiveData)](https://developer.android.com/topic/libraries/architecture/lifecycle)
+      - [View Binding](https://developer.android.com/topic/libraries/view-binding)
+  - **Networking**:
+      - [Retrofit 2](https://square.github.io/retrofit/) for REST API communication
+      - [OkHttp 3](https://square.github.io/okhttp/) as the HTTP client
+      - [Gson](https://github.com/google/gson) for JSON serialization
+  - **UI**:
+      - [Material Design Components](https://material.io/develop/android)
+      - [SmoothBottomBar](https://github.com/ibrahimsn98/SmoothBottomBar) for navigation
+  - **Location and Maps**:
+      - [Google Maps Platform](https://developers.google.com/maps/documentation/android-sdk/start)
+      - [Google Play Services for Location](https://developers.google.com/android/reference/com/google/android/gms/location/package-summary)
+  - **Authentication**:
+      - [Google Play Services for Auth](https://developers.google.com/android/reference/com/google/android/gms/auth/api/package-summary)
 
-## 📊 App Flow Diagram  
+-----
 
-```mermaid
-flowchart TD
-    A[Splash Screen] --> B[Main Dashboard]
-    B --> C[APK Analysis]
-    B --> D[Device Information]
-    B --> E[Settings/About]
+## Permissions Explained
 
-    C --> C1[Select APK File]
-    C1 --> C2[Extract Metadata]
-    C2 --> C3[Analyze Permissions]
-    C3 --> C4[Show APK Report]
+The application requests a number of permissions to provide its core functionality. Here’s why they are needed:
 
-    D --> D1[Fetch Device Properties]
-    D1 --> D2[Show Device Report]
+  - **`CAMERA`**: To allow users to take and upload photos of found items.
+  - **`INTERNET` & `ACCESS_NETWORK_STATE`**: Required for all network communication, including user authentication, location reporting, and chat.
+  - **`ACCESS_FINE_LOCATION` & `ACCESS_COARSE_LOCATION`**: Essential for accurately determining the device's location.
+  - **`ACCESS_BACKGROUND_LOCATION`**: Crucial for the app to track the device's location even when it's not in use, which is a core feature for finding a lost phone.
+  - **`BLUETOOTH`, `BLUETOOTH_ADMIN`, `BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `BLUETOOTH_ADVERTISE`**: Needed for the proximity detection feature, allowing the app to scan for, connect to, and advertise its presence to other devices.
+  - **`READ_PHONE_STATE`, `READ_PHONE_NUMBERS`, `READ_SMS`, `READ_CALL_LOG`, `READ_CONTACTS`**: These permissions are likely used for user verification or for features that help identify the device or its owner.
+  - **`USE_BIOMETRIC`**: To provide a secure and convenient way for users to authenticate within the app.
+  - **`FOREGROUND_SERVICE`**: Required to run the location and beacon services reliably in the background.
+  - **`RECEIVE_BOOT_COMPLETED`**: To automatically start the app's services when the device is turned on, ensuring continuous protection.
 
-    E --> E1[App Info & Preferences]
-````
+-----
 
----
+## Getting Started
 
-## 📂 Project Structure
+To get started with the project, you can clone the repository and set it up in Android Studio.
 
-```
-APkARiS/
-│── app/                     
-│   ├── src/main/java/...    # Kotlin source code
-│   ├── res/                 # Layouts, drawables, animations, etc.
-│   ├── AndroidManifest.xml  # App manifest
-│── gradle/                  
-│── build.gradle             # App-level gradle
-│── settings.gradle.kts      
-```
+### Prerequisites
 
----
+  - Android Studio (latest version recommended)
+  - Android SDK
+  - An Android device or emulator
 
-## 🛠️ Tech Stack
+### Installation
 
-* **Language**: Kotlin
-* **Framework**: Android SDK
-* **UI**: XML Layouts + Material Design + Animations
-* **Version Control**: Git + GitHub
+1.  **Clone the repository**:
+    ```sh
+    git clone https://github.com/normie69k/apkaris.git
+    ```
+2.  **Open in Android Studio**: Open the cloned project in Android Studio.
+3.  **API Key**: You will need to provide your own Google Maps API key. Add it to your `local.properties` file:
+    ```
+    MAPS_API_KEY=YOUR_API_KEY
+    ```
+    Then, reference this in your `AndroidManifest.xml` where the key is specified as `@string/google_maps_key`.
+4.  **Build and Run**: Build the project to download all the dependencies, and then run it on an emulator or a physical device.
 
----
+-----
 
-## ⚙️ How It Works
+## Project Structure
 
-1. **App Launch**
+The project is organized into the following main packages:
 
-    * User opens the app → Splash Screen animates logo, name, and description.
-    * After \~5 seconds, the app transitions to the **Main Dashboard**.
+  - **`adapters`**: Contains `RecyclerView` adapters for displaying lists of data.
+  - **`bluetooth`**: Includes the `BluetoothScanner` class for handling BLE scanning.
+  - **`fragments`**: Contains all the UI fragments for different screens of the app.
+  - **`models`**: Defines the data models used in the application (e.g., `ChatModels`).
+  - **`network`**: Contains the `ApiService` interface for Retrofit.
+  - **`services`**: Includes the background services like `LocationService` and `BeaconService`.
+  - **`utils`**: Utility classes and helper functions.
 
-2. **Main Dashboard**
+-----
 
-    * Central hub with navigation options for:
+## Contributing
 
-        * APK Analysis
-        * Device Information
-        * Settings/About
+Contributions are welcome\! If you would like to contribute to this project, please follow these steps:
 
-3. **APK Analysis Flow**
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/your-feature-name`).
+3.  Make your changes and commit them (`git commit -m 'Add some feature'`).
+4.  Push to the branch (`git push origin feature/your-feature-name`).
+5.  Open a Pull Request.
 
-    * User selects an APK file from storage.
-    * The app parses the APK’s `AndroidManifest.xml`.
-    * Extracts metadata such as app name, version, package name.
-    * Reads declared permissions and groups them by severity.
-    * Displays results in a structured, readable format.
+-----
 
-4. **Device Information Flow**
+## License
 
-    * On selecting “Device Info”, the app queries system properties.
-    * Uses Android APIs (`Build`, `TelephonyManager`, etc.) to fetch:
-
-        * Model, manufacturer, hardware info.
-        * Android version & SDK.
-        * IMEI/serial (if accessible).
-    * Displays info for user review or troubleshooting.
-
-5. **Settings/About**
-
-    * Provides app metadata and developer details.
-    * Optional customization options (e.g., theme, preferences).
-
----
-
-## 🔧 Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/Normie69K/APkARiS.git
-   ```
-2. Open the project in **Android Studio**.
-3. Sync Gradle dependencies.
-4. Run the app on an emulator or physical device.
-
----
-
-## 👨‍💻 Contributors
-
-* **Karan Singh** ([@Normie69K](https://github.com/Normie69K))
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
-```
-
-This version gives both **features explanation** and a **visual flow diagram** for the app. Do you want me to also add a **sequence diagram** for APK analysis (step-by-step parsing process)?
-```
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
