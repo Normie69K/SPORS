@@ -4,15 +4,15 @@ SPORS is a comprehensive Android application designed to be a modern-day solutio
 
 ## Table of Contents
 
-  - [Key Features](https://www.google.com/search?q=%23key-features)
-  - [How It Works](https://www.google.com/search?q=%23how-it-works)
-  - [Architecture](https://www.google.com/search?q=%23architecture)
-  - [Technology Stack](https://www.google.com/search?q=%23technology-stack)
-  - [Permissions Explained](https://www.google.com/search?q=%23permissions-explained)
-  - [Getting Started](https://www.google.com/search?q=%23getting-started)
-  - [Project Structure](https://www.google.com/search?q=%23project-structure)
-  - [Contributing](https://www.google.com/search?q=%23contributing)
-  - [License](https://www.google.com/search?q=%23license)
+  - [Key Features](https://github.com/Normie69K/SPORS/edit/main/README.md#key-features)
+  - [How It Works](https://github.com/Normie69K/SPORS/edit/main/README.md#how-it-works)
+  - [Architecture](https://github.com/Normie69K/SPORS/edit/main/README.md#architecture)
+  - [Technology Stack](https://github.com/Normie69K/SPORS/edit/main/README.md#technology-stack)
+  - [Permissions Explained](https://github.com/Normie69K/SPORS/edit/main/README.md#permissions-explained)
+  - [Getting Started](https://github.com/Normie69K/SPORS/edit/main/README.md#getting-started)
+  - [Project Structure](https://github.com/Normie69K/SPORS/edit/main/README.md#project-structure)
+  - [Contributing](https://github.com/Normie69K/SPORS/edit/main/README.md#contributing)
+  - [License](https://github.com/Normie69K/SPORS/edit/main/README.md#license)
 
 -----
 
