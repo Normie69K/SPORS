@@ -103,7 +103,7 @@ To get started with the project, you can clone the repository and set it up in A
 
 1.  **Clone the repository**:
     ```sh
-    git clone https://github.com/normie69k/apkaris.git
+    git clone https://github.com/normie69k/SPORS.git
     ```
 2.  **Open in Android Studio**: Open the cloned project in Android Studio.
 3.  **API Key**: You will need to provide your own Google Maps API key. Add it to your `local.properties` file:
